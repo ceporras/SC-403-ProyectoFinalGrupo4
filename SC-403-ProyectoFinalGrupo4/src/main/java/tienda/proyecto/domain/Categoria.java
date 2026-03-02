@@ -19,7 +19,10 @@ import lombok.Setter;
 @Setter
 @Data
 @Entity
-@Table(name = "usuario")
-public class Usuario implements Serializable{
+@Table(name = "categoria")
+public class Categoria implements Serializable{
+    
     private static final long serialVersionUID = 1L;
+    
+    
 }
