@@ -22,4 +22,19 @@ import lombok.Setter;
 @Table(name = "usuario")
 public class Usuario implements Serializable{
     private static final long serialVersionUID = 1L;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
+    private Integer id_usuario;
+    
+    private String username;
+    
+    private String primerApellido;
+    
+    private String segundoApellido;
+    
+    private String password;
+    
+    private String role;
 }

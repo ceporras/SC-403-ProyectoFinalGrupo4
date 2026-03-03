@@ -24,5 +24,19 @@ public class Categoria implements Serializable{
     
     private static final long serialVersionUID = 1L;
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_categoria")
+    public Integer idCategoria;
     
+    @Column(unique = true, nullable = false, length = 50)
+    @NotNull
+    @Size(max = 50)
+    public String nombre;
+    
+    @Column(name = "activo")
+    public Boolean activo;
+    
+    @OneToMany(mappedBy = "categoria")
+    private List<Producto> productos;
 }

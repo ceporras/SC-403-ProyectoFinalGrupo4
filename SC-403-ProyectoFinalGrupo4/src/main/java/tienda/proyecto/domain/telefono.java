@@ -1,4 +1,3 @@
-
 package tienda.proyecto.domain;
 
 import jakarta.persistence.Column;
@@ -11,7 +10,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
 import lombok.Getter;
@@ -21,20 +19,16 @@ import lombok.Setter;
 @Setter
 @Data
 @Entity
-@Table(name = "pedido")
-public class Pedido implements Serializable{
+@Table(name = "telefono")
+public class telefono implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_pedido")
-    private Integer id_pedido;
+    @Column(name = "id_usuario")
+    private Integer id_usuario;
     
-    private LocalDate fechaPedido;
-    
-    private String estado;
-    
-    //relacion a tabla intermedia
-    @OneToMany(mappedBy = "pedido")
-    private List<DetallePedido> detallePedido;
+    private Integer telefono;
+
 }

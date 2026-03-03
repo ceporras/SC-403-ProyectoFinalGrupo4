@@ -11,7 +11,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.List;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,4 +24,14 @@ import lombok.Setter;
 @Table(name = "factura")
 public class Factura implements Serializable{
     private static final long serialVersionUID = 1L;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_factura")
+    private Integer id_factura;
+    
+    private BigDecimal montoTotal;
+    
+    private LocalDate fecha;
+    
 }
