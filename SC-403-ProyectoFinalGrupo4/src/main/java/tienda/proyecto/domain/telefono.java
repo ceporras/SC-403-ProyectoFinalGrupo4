@@ -20,7 +20,7 @@ import lombok.Setter;
 @Data
 @Entity
 @Table(name = "telefono")
-public class telefono implements Serializable {
+public class Telefono implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
