@@ -16,12 +16,20 @@ public class DetallePedido implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_detallepedido")
-    private Integer id_detallepedido;
+    @Column(name = "id_detalle_pedido")
+    private Integer idDetallePedido;
     
+    @Column(name = "precio_unitario", nullable = false)
+    @NotNull
     private BigDecimal precioUnitario;
     
+    @NotNull
+    @Column(nullable = false)
     private int cantidad;
+    
+    @Column(nullable = false)
+    @NotNull
+    private Boolean activo;
     
     @ManyToOne
     @JoinColumn(name = "id_pedido")
@@ -30,4 +38,5 @@ public class DetallePedido implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_producto")
     private Producto producto;
+    
 }

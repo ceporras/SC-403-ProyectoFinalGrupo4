@@ -34,8 +34,10 @@ public class Categoria implements Serializable{
     @Size(max = 50)
     public String nombre;
     
-    @Column(name = "activo")
-    public Boolean activo;
+    @NotNull
+    @Column(nullable = false)
+    private Boolean activo;
+    
     
     @OneToMany(mappedBy = "categoria")
     private List<Producto> productos;

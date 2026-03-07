@@ -20,21 +20,47 @@ import lombok.Setter;
 @Data
 @Entity
 @Table(name = "usuario")
-public class Usuario implements Serializable{
+public class Usuario implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
     private Integer id_usuario;
-    
+
+    @NotNull
+    @Column(length = 100, nullable = false, name = "nombre", unique = true)
     private String username;
-    
+
+    @NotNull
+    @Column(length = 100, nullable = false, name = "primer_apellido")
     private String primerApellido;
-    
+
+    @Column(length = 100, nullable = true, name = "segundo_apellido")
     private String segundoApellido;
-    
+
+    @NotNull
+    @Size(max = 255)
+    @Column(length = 255, nullable = false, name = "contrasena")
     private String password;
-    
+
+    @NotNull
+    @Size(max = 50)
+    @Column(length = 50, nullable = false, name = "rol")
     private String role;
+    
+    @NotNull
+    @Column(nullable = false)
+    private Boolean activo;
+    
+    @OneToMany(mappedBy = "usuario")
+    private List<Direccion> direccion;
+    
+    //un usuario puede tener varios reviews
+    @OneToMany(mappedBy = "usuario")
+    private List<Review> review;
+    
+    @OneToMany(mappedBy = "usuario")
+    private List<Telefono> telefono;
 }

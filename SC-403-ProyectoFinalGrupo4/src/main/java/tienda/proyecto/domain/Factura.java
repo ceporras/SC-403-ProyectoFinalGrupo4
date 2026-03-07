@@ -1,4 +1,3 @@
-
 package tienda.proyecto.domain;
 
 import jakarta.persistence.Column;
@@ -6,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -22,16 +23,29 @@ import lombok.Setter;
 @Data
 @Entity
 @Table(name = "factura")
-public class Factura implements Serializable{
+public class Factura implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_factura")
-    private Integer id_factura;
+    @NotNull
+    private Integer idFactura;
     
+    @NotNull
+    @Column(nullable = false)
     private BigDecimal montoTotal;
     
+    @NotNull
+    @Column(nullable = false)
     private LocalDate fecha;
     
+    @NotNull
+    @Column(nullable = false)
+    private Boolean activo;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_pedido")
+    private Pedido pedido;
 }

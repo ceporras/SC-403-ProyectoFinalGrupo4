@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
@@ -27,25 +29,40 @@ import lombok.Setter;
 @Setter
 @Data
 @Entity
-@Table(name = "review")
+@Table(name = "resena")
 public class Review implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_review")
+    @Column(name = "id_resena")
     private Integer idReview;
     
     @Max(value = 5)
     @Min(value = 1)
+    @NotNull
+    @Column(nullable = false)
     private int calificacion;
     
     private String comentario;
 
+    @Size(max = 1024)
+    @Column(name = "imagen_url", length = 1024)
+    private String rutaImagen;
+    
+    @NotNull
+    @Column(nullable = false)
     private LocalDate fecha;
     
-    @Column(length = 1024)
-    @Size(max = 1024)
-    public String rutaImagen;
+    @Column(nullable = false)
+    private Boolean activo;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_producto")
+    private Producto producto;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_usuairo")
+    private Usuario usuario;
 }
