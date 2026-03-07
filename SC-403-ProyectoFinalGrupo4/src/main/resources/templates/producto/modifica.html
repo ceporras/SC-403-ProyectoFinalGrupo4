@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{general/layout :: head('Productos · Form')}"></head>
+  <body>
+    <nav th:replace="~{general/layout :: navbar}"></nav>
+
+    <main class="container py-4" style="max-width: 920px;">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+          <h1 class="h3 mb-0">Productos</h1>
+          <div class="muted"> <code>th:field</code>.</div>
+        </div>
+        <a class="btn btn-outline-secondary" href="listado">Volver al listado</a>
+      </div>
+
+      <div class="card">
+        <div class="card-body p-4">
+          <form method="post" action="#">
+            <div class="mb-3">
+              <label class="form-label">Nombre</label>
+              <input class="form-control" type="text" placeholder="Ej: Eau de Parfum" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Descripción</label>
+              <textarea class="form-control" rows="3" placeholder="Descripción del producto…" ></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Stock</label>
+              <input class="form-control" type="number" placeholder="0" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Imagen URL</label>
+              <input class="form-control" type="url" placeholder="https://…" >
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Notas de salida</label>
+              <input class="form-control" type="text" placeholder="Ej: cítricos" >
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Notas corazón</label>
+              <input class="form-control" type="text" placeholder="Ej: jazmín" >
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Notas fondo</label>
+              <input class="form-control" type="text" placeholder="Ej: ámbar" >
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Categoría (id_categoria)</label>
+              <input class="form-control" type="number" placeholder="1" required>
+            </div>
+            <div class="d-flex flex-wrap gap-2 mt-4">
+              <button class="btn btn-primary" type="submit">Guardar</button>
+              <button class="btn btn-outline-secondary" type="reset">Limpiar</button>
+              <a class="btn btn-link" href="listado">Cancelar</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <footer th:replace="~{general/layout :: footer}"></footer>
+    <div th:replace="~{general/layout :: scripts}"></div>
+  </body>
+</html>

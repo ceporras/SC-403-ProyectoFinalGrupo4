@@ -1,15 +1,45 @@
-<!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{general/layout :: head('Tienda')}"></head>
+  <body>
+    <nav th:replace="~{general/layout :: navbar}"></nav>
+
+    <main class="container py-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+          <h1 class="h3 mb-0">Catálogo</h1>
+          <div class="muted"> </div>
+        </div>
+        <div class="d-flex gap-2">
+          <input class="form-control" style="max-width: 280px;" placeholder="Buscar perfume (UI)">
+          <button class="btn btn-outline-primary" type="button">Buscar</button>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="ratio ratio-4x3 bg-body-tertiary border-bottom"></div>
+            <div class="card-body">
+              <h5 class="card-title">Producto (placeholder)</h5>
+              <p class="card-text muted">Descripción corta</p>
+              <div class="d-flex gap-2">
+                <button class="btn btn-primary btn-sm" type="button">Agregar</button>
+                <button class="btn btn-outline-secondary btn-sm" type="button">Ver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-8">
+          <div class="alert alert-info mb-0">
+             <code>th:each</code>.
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer th:replace="~{general/layout :: footer}"></footer>
+    <div th:replace="~{general/layout :: scripts}"></div>
+  </body>
 </html>

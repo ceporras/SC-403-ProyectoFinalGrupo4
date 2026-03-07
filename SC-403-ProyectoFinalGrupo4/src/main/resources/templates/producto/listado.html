@@ -1,15 +1,63 @@
-<!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{general/layout :: head('Productos · Listado')}"></head>
+  <body>
+    <nav th:replace="~{general/layout :: navbar}"></nav>
+
+    <main class="container py-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+          <h1 class="h3 mb-0">Productos</h1>
+          <div class="muted">Listado vacío (sin datos). Luego conectás Thymeleaf.</div>
+        </div>
+        <div class="d-flex gap-2">
+          <a class="btn btn-primary" href="modifica">Crear</a>
+          <a class="btn btn-outline-secondary" href="/">Inicio</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="row g-2 align-items-center mb-3">
+            <div class="col-md-6">
+              <input class="form-control" placeholder="Buscar (UI solamente)" />
+            </div>
+            <div class="col-md-3">
+              <select class="form-select">
+                <option selected>Filtro (UI)</option>
+                <option>Opción 1</option>
+                <option>Opción 2</option>
+              </select>
+            </div>
+            <div class="col-md-3 d-grid">
+              <button class="btn btn-outline-primary" type="button">Aplicar</button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-striped align-middle mb-0">
+              <thead>
+                <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Stock</th>
+              <th scope="col">Categoría</th>
+              <th scope="col">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="5" class="text-center muted py-4">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer th:replace="~{general/layout :: footer}"></footer>
+    <div th:replace="~{general/layout :: scripts}"></div>
+  </body>
 </html>
