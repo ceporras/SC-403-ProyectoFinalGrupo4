@@ -3,11 +3,14 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <body>
+        <script th:src="@{/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js}"></script>
         <link th:href="@{/webjars/font-awesome/css/all.min.css}" rel="stylesheet"/>
         <section th:fragment="listado">
             <main class="container py-4">
                 <section th:replace="~{producto/fragmentos :: agregar}"></section>
-                <!--barra de busqueda -- TEMP -->
+
+
+                <!--barra de busqueda  -->
                 <div class="card">
                     <div class="card-body">
                         <div class="row g-2 align-items-center mb-3">
@@ -15,28 +18,63 @@
                                 <input class="form-control" placeholder="Buscar (UI solamente)" />
                             </div>
                             <div class="col-md-3">
-                                <select class="form-select">
-                                    <option selected>Filtro (UI)</option>
-                                    <option>Opción 1</option>
-                                    <option>Opción 2</option>
+                                <select name="categoria.idCategoria" 
+                                        class="form-select" 
+                                        aria-label="Default select example">
+                                    <option selected>--categoria--</option>
+                                    <option th:each="c : ${categorias}" th:value="${c.idCategoria}">
+                                        [[${c.nombre}]]
+                                    </option>
                                 </select>
                             </div>
                             <div class="col-md-3 d-grid">
-                                <button class="btn btn-outline-primary" type="button">Aplicar</button>
+                                <button class="btn btn-primary" type="button">Aplicar</button>
+                            </div>
+                            <div class="col-md-3 d-grid">
+                                <button class="btn btn-outline-primary" type="button">Limpiar filtro</button>
                             </div>
                         </div>
-                        <!--Div de la lista de productos -->
+                        <!-- lista de productos -->
                         <section th:replace="~{producto/fragmentos :: tarjetas-producto}"></section>
                     </div>
                 </div>
             </main>
         </section>
-        
-        
+
+
+
+
         <section th:fragment="tarjetas-producto" class="container py-4">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
                 <div th:each="p : ${productos}" class="col">
-                    <div class="card h-100 shadow-sm">
+                    <div class="card h-100 shadow-sm position-relative">
+
+                        <!-- boton elipse para modificar y borrar -->
+                        <div class="dropdown position-absolute top-0 end-0 m-2" style="z-index:1050;">
+                            <button class="btn btn-sm btn-light border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" th:href="@{/producto/editar/{id}(id=${p.idProducto})}">
+                                        <i class="fa-solid fa-pen me-2"></i> Editar
+                                    </a>
+                                </li>
+                                <li>
+
+                                    <button type="submit" class="dropdown-item text-danger" 
+                                            data-bs-toggle="modal" data-bs-target="#confirmModal"
+                                            th:data-bs-id="${p.idProducto}" th:data-bs-descripcion="${p.descripcion}">
+                                        <i class="fa-solid fa-trash me-2"></i> Eliminar
+                                    </button>
+
+                                    
+                                </li>
+                            </ul>
+                        </div>
+
+
+                        <!-- Cards de los productos -->
                         <div class="d-flex justify-content-center align-items-center bg-light p-3" style="height: 200px;">
                             <img th:src="${p.rutaImagen}" class="img-fluid" 
                                  th:alt="${p.nombre}" 
@@ -141,5 +179,45 @@
                 </div>
             </div>
         </section>
+
+
+
+
+
+
+        <section th:fragment="confirmarEliminar">
+            <div class="modal fade" 
+                 id="confirmModal" 
+                 tabindex="-1" 
+                 aria-labelledby="modalLabel" 
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered custom-modal-animation">
+                    <div class="modal-content animate-slide-up">
+                        <form th:action="@{/producto/eliminar}" th:object="${producto}" method="post">
+                            <input type="hidden" name="idProducto" id="modalId"/>
+                            <div class="modal-header bg-warning text-white">
+                                <h5 class="modal-title" id="modalLabel">
+                                    <i class="fa-solid fa-circle-radiation"></i> [[#{accion.confirmar}]]
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>[[#{accion.confirmar.texto1}]] <span id="modalDescripcion"></span>?</p>
+                                <h6>[[#{accion.confirmar.texto2}]]</h6>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </body>
 </html>
