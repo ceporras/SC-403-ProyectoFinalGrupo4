@@ -1,51 +1,71 @@
 <!doctype html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-  <head th:fragment="head(titulo)">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:text="${titulo}">Tienda de Perfumes</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-      .brand-dot{display:inline-block;width:.6rem;height:.6rem;border-radius:999px;background:#0d6efd;margin-right:.5rem;vertical-align:middle}
-      .muted{color: #6c757d}
-    </style>
-  </head>
+    <head th:fragment="head(titulo)">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title th:text="${titulo}">Tienda de Perfumes</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <body>
-    <nav th:fragment="navbar" class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
-      <div class="container">
-        <a class="navbar-brand fw-semibold" href="/">
-          <span class="brand-dot"></span>Perfumería
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Abrir menú">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navMain">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item"><a class="nav-link" href="/tienda/listado">Tienda</a></li>
-            <li class="nav-item"><a class="nav-link" href="/producto/listado">Productos</a></li>
-            <li class="nav-item"><a class="nav-link" href="/categoria/listado">Categorías</a></li>
-            <li class="nav-item"><a class="nav-link" href="/pedido/listado">Pedidos</a></li>
-            <li class="nav-item"><a class="nav-link" href="/factura/listado">Facturas</a></li>
-            <li class="nav-item"><a class="nav-link" href="/ticket/listado">Soporte</a></li>
-          </ul>
-          <div class="d-flex gap-2">
-            <a class="btn btn-outline-secondary btn-sm" href="/usuario/listado">Admin</a>
-            <a class="btn btn-primary btn-sm" href="/login">Ingresar</a>
-          </div>
+        <!-- Added version numbers for these to load correctly -->
+        <link th:href="@{/webjars/bootstrap/5.3.7/css/bootstrap.min.css}" rel="stylesheet"/>
+        <link th:href="@{/webjars/font-awesome/7.0.0/css/all.min.css}" rel="stylesheet"/>
+        <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+        <script th:src="@{/webjars/popper.js/2.11.7/umd/popper.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/5.3.7/js/bootstrap.min.js}"></script>
+
+        <script th:src="@{/js/rutinas.js}"></script>
+
+        <style>
+            .brand-dot{
+                display:inline-block;
+                width:.6rem;
+                height:.6rem;
+                border-radius:999px;
+                background:#0d6efd;
+                margin-right:.5rem;
+                vertical-align:middle
+            }
+            .muted{
+                color: #6c757d
+            }
+        </style>
+    </head>
+
+    <body>
+        <nav th:fragment="navbar" class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
+            <div class="container">
+                <a class="navbar-brand fw-semibold" href="/">
+                    <span class="brand-dot"></span>Perfumería
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Abrir menú">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navMain">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="/tienda/listado">Tienda</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/producto/listado">Productos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/categoria/listado">Categorías</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/pedido/listado">Pedidos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/factura/listado">Facturas</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/ticket/listado">Soporte</a></li>
+                    </ul>
+                    <div class="d-flex gap-2">
+                        <a class="btn btn-outline-secondary btn-sm" href="/usuario/listado">Admin</a>
+                        <a class="btn btn-primary btn-sm" href="/login">Ingresar</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <footer th:fragment="footer" class="border-top py-3 mt-5">
+            <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <div class="small muted">© 2026 Perfumería </div>
+                <div class="small muted">SC-403 · II Avance</div>
+            </div>
+        </footer>
+
+        <div th:fragment="scripts">
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         </div>
-      </div>
-    </nav>
-
-    <footer th:fragment="footer" class="border-top py-3 mt-5">
-      <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
-        <div class="small muted">© 2026 Perfumería </div>
-        <div class="small muted">SC-403 · II Avance</div>
-      </div>
-    </footer>
-
-    <div th:fragment="scripts">
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    </div>
-  </body>
+    </body>
 </html>
