@@ -33,6 +33,11 @@ public class ProductoService {
         return productoRepository.findById(idProducto);
     }
     
+    @Transactional(readOnly = true)
+    public List<Producto> getProductoByCategoria(int idCategoria){
+        return productoRepository.getProductoByCategoria(idCategoria);
+    }
+    
     @Transactional
     public void save(Producto producto, MultipartFile imagenFile){
         producto = productoRepository.save(producto);
