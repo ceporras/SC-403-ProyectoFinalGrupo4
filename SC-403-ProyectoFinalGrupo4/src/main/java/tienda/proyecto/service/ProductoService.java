@@ -1,4 +1,3 @@
-
 package tienda.proyecto.service;
 
 import tienda.proyecto.domain.Producto;
@@ -19,49 +18,62 @@ public class ProductoService {
     private ProductoRepository productoRepository;
     @Autowired
     private FirebaseStorageService firebaseStorageService;
-    
+
     @Transactional(readOnly = true)
-    public List<Producto> getProductos(boolean activo){
+    public List<Producto> getProductos(boolean activo) {
         if (activo) { //solo activos
             return productoRepository.findByActivoTrue();
         }
         return productoRepository.findAll();
     }
-    
+
     @Transactional(readOnly = true)
-    public Optional<Producto> getProducto(Integer idProducto){
+    public Optional<Producto> getProducto(Integer idProducto) {
         return productoRepository.findById(idProducto);
     }
-    
+
     @Transactional(readOnly = true)
-    public List<Producto> getProductoByCategoria(int idCategoria){
+    public List<Producto> getProductoByCategoria(int idCategoria) {
         return productoRepository.getProductoByCategoria(idCategoria);
     }
-    
+
     @Transactional
-    public void save(Producto producto, MultipartFile imagenFile){
+    public void save(Producto producto, MultipartFile imagenFile) {
+
+        Producto existente = null;
+        if (producto.getIdProducto() != null) {
+            existente = productoRepository
+                    .findById(producto.getIdProducto())
+                    .orElse(null);
+        }
+        //si producto existe y ya tiene imagen en DB, no se reemplaza con null para conservar la imagen
+        if (imagenFile.isEmpty() && existente != null) {
+            producto.setRutaImagen(existente.getRutaImagen());
+        }
+
         producto = productoRepository.save(producto);
+
         if (!imagenFile.isEmpty()) { //si no esta vacio, pasaron una imagen
-            try{
+            try {
                 String rutaImagen = firebaseStorageService.uploadImage(imagenFile, "producto", producto.getIdProducto());
                 producto.setRutaImagen(rutaImagen);
                 productoRepository.save(producto);
-            }catch(IOException e){
-                
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
-    
+
     @Transactional
-    public void delete(Integer idProducto){
+    public void delete(Integer idProducto) {
         //verifica si la producto existe antes de intentar eliminarlo
-        if (!productoRepository.existsById(idProducto)){
+        if (!productoRepository.existsById(idProducto)) {
             //lanza exception para indicar que el usuario no fue encontrado
             throw new IllegalArgumentException("La producto con ID " + idProducto + " no existe.");
         }
         try {
             productoRepository.deleteById(idProducto);
-        }catch(DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new IllegalStateException("No se puede eliminar la producto. Tiene datos asociados.", e);
         }
     }
