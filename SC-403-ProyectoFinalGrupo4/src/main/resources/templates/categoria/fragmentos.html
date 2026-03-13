@@ -18,7 +18,7 @@
                                 <input class="form-control" placeholder="Buscar" />
                             </div>
                             <div class="col-md-3 d-grid">
-                                <button class="btn btn-outline-primary" type="button">Aplicar</button>
+                                <button class="btn btn-outline-primary" type="button">[[#{accion.aplicar}]]</button>
                             </div>
                         </div>
                         <!--tabla de categorias  -->
@@ -27,8 +27,8 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">ID</th>
-                                        <th scope="col">Nombre</th>
-                                        <th scope="col">Activo</th>
+                                        <th scope="col">[[#{categoria.nombre}]]</th>
+                                        <th scope="col">[[#{categoria.activo}]]</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -64,11 +64,11 @@
 
             <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                 <div>
-                    <h1 class="h3 mb-0">Categorías</h1>
-                    <div class="muted"> Listado de categorias </div>
+                    <h1 class="h3 mb-0">[[#{categoria.listado}]]</h1>
+                    <div class="muted">[[#{categoria.listado}]]</div>
                 </div>
                 <div class="d-flex gap-2" sec:authorize="hasRole('ROLE_ADMIN')">
-                    <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCategoriaModal" >Nueva Categoria</a>
+                    <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCategoriaModal" >[[#{categoria.agregar}]]</a>
                 </div>
             </div>
 
@@ -80,7 +80,7 @@
                     <div class="modal-content">
                         <div class="modal-header bg-info text-white">
                             <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                <i class="fa-solid fa-layer-group"></i> [[#{categoria.agregar}]]</h1>
+                                <i class="fa-solid fa-layer-group"></i>[[#{categoria.agregar}]]</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <form th:action='@{/categoria/guardar}' th:object='${categorias}'
@@ -109,10 +109,10 @@
             <main class="container py-4" style="max-width: 920px;">
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                     <div>
-                        <h1 class="h3 mb-0">[[#{categoria.editar}]]</h1>
+                        <h1 class="h3 mb-0">[[#{accion.actualizar}]]</h1>
 
                     </div>
-                    <a class="btn btn-outline-secondary" th:href="@{/categoria/listado}">[[#{general.volver}]]</a>
+                    <a class="btn btn-outline-secondary" th:href="@{/categoria/listado}">[[#{accion.regresar}]]</a>
                 </div>
 
                 <div class="card">
@@ -131,9 +131,9 @@
                                        name="activo" id="activo" th:field="*{activo}"/>
                             </div>
                             <div class="d-flex flex-wrap gap-2 mt-4">
-                                <button class="btn btn-primary" type="submit">[[#{general.guardar}]]</button>
-                                <button class="btn btn-outline-secondary" onclick="clearForm()">[[#{general.limpiar}]]</button>
-                                <a class="btn btn-link" th:href="@{/categoria/listado}">[[#{general.cancelar}]]</a>
+                                <button class="btn btn-primary" type="submit">[[#{accion.guardar}]]</button>
+                                <button class="btn btn-outline-secondary" onclick="clearForm()">[[#{accion.limpiar}]]</button>
+                                <a class="btn btn-link" th:href="@{/categoria/listado}">[[#{accion.cancelar}]]</a>
                             </div>
                         </form>
                     </div>

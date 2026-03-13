@@ -22,17 +22,16 @@
                                 <select name="categoria.idCategoria" 
                                         class="form-select" 
                                         aria-label="Default select example">
-                                    <option selected>--categoria--</option>
                                     <option th:each="c : ${categorias}" th:value="${c.idCategoria}">
                                         [[${c.nombre}]]
                                     </option>
                                 </select>
                             </div>
                             <div class="col-md-3 d-grid">
-                                <button class="btn btn-primary" type="button">Aplicar</button>
+                                <button class="btn btn-primary" type="button">[[#{accion.aplicar}]]</button>
                             </div>
                             <div class="col-md-3 d-grid">
-                                <button class="btn btn-outline-primary" type="button">Limpiar filtro</button>
+                                <button class="btn btn-outline-primary" type="button">[[#{accion.limpiar}]]</button>
                             </div>
                         </div>
                         <!-- lista de productos -->
@@ -58,7 +57,7 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
                                     <a class="dropdown-item" th:href="@{/producto/modificar/{id}(id=${p.idProducto})}">
-                                        <i class="fa-solid fa-pen me-2"></i> Editar
+                                        <i class="fa-solid fa-pen me-2"></i>[[#{accion.actualizar}]]
                                     </a>
                                 </li>
                                 <li>
@@ -66,7 +65,7 @@
                                     <button type="submit" class="dropdown-item text-danger" 
                                             data-bs-toggle="modal" data-bs-target="#confirmModal"
                                             th:data-bs-id="${p.idProducto}" th:data-bs-descripcion="${p.descripcion}">
-                                        <i class="fa-solid fa-trash me-2"></i> Eliminar
+                                        <i class="fa-solid fa-trash me-2"></i>[[#{accion.eliminar}]]
                                     </button>
 
 
@@ -82,16 +81,16 @@
                                  style="max-height: 100%; object-fit: contain;"/>
                         </div>
                         <div class="card-header bg-white">
-                            <h5 class="card-title text-center text-truncate mb-0" th:text="${p.nombre}">Nombre</h5>
+                            <h5 class="card-title text-center text-truncate mb-0" th:text="${p.nombre}">[[#{producto.nombre}]]</h5>
                         </div>
                         <div class="card-body d-flex flex-column">
-                            <p class="card-text text-muted mb-auto text-truncate" th:text="${p.descripcion}">Descripcion</p>
+                            <p class="card-text text-muted mb-auto text-truncate" th:text="${p.descripcion}">[[#{producto.descripcion}]]</p>
                         </div>
                         <div class="card-footer bg-white d-flex justify-content-between align-items-center">
                             <div class="fw-bold">
                                 <span class="text-success h5" th:text="${#numbers.formatCurrency(p.precio)}">$99.99</span>
                                 <span th:if="${p.stock > 0}" class="badge text-bg-success ms-2" th:text="${p.stock} + ' unidades'"></span>
-                                <span th:unless="${p.stock > 0}" class="badge text-bg-danger ms-2">Agotado</span>
+                                <span th:unless="${p.stock > 0}" class="badge text-bg-danger ms-2">[[#{producto.estado}]]</span>
                             </div>
                             <form th:action="@{/carrito/agregar}" th:method="POST" class="d-inline">
                                 <input type="hidden" th:value="${p.idProducto}" name="idProducto"/>
@@ -112,8 +111,8 @@
             <!-- Button trigger modal -->
             <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                 <div>
-                    <h1 class="h3 mb-0">Productos</h1>
-                    <div class="muted">Lista de productos.</div>
+                    <h1 class="h3 mb-0">[[#{producto.productos}]]</h1>
+                    <div class="muted">[[#{producto.listado}]]</div>
                 </div>
                 <div class="d-flex gap-2" sec:authorize="hasRole('ROLE_ADMIN')">
                     <button type="button" class="btn btn-primary"
@@ -152,8 +151,20 @@
                                     <label>[[#{producto.descripcion}]]</label>                                    
                                     <textarea class="form-control" name="descripcion" rows="3"></textarea>
                                 </div>
+                                <div class='mb-3'>
+                                    <label>[[#{producto.nota.salida}]]</label>
+                                    <input type="text" name='notasSalida' class='form-control' maxlength="50" />
+                                </div>
+                                <div class='mb-3'>
+                                    <label>[[#{producto.nota.corazon}]]</label>
+                                    <input type="text" name='notasCorazon' class='form-control' maxlength="50" />
+                                </div>
+                                <div class='mb-3'>
+                                    <label>[[#{producto.nota.fondo}]]</label>
+                                    <input type="text" name='notasFondo' class='form-control' maxlength="50" />
+                                </div>
                                 <div class="mb-3">
-                                    <label>[[#{producto.stock}]]</label>                                    
+                                    <label>[[#{producto.existencias}]]</label>                                    
                                     <input type="number" class="form-control" name="existencias" min="0" required/>
                                 </div>
                                 <div class="mb-3">
@@ -164,7 +175,7 @@
                                     <label>[[#{producto.activo}]]</label>
                                     <input type="checkbox" name='activo' class='form-check-input'/></div>
                                 <div class='mb-3'>
-                                    <label>[[#{producto.rutaImagen}]]</label>
+                                    <label>[[#{producto.imagen}]]</label>
                                     <input type="file" name='imagenFile' onchange='mostrarImagen(this);'
                                            class='form-control'/>
                                     <img id='blah' src='#' alt='imagen de categoría' height="200"/></div>
@@ -189,10 +200,10 @@
             <main class="container py-4" style="max-width: 920px;">
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                     <div>
-                        <h1 class="h3 mb-0">Productos</h1>
+                        <h1 class="h3 mb-0">[[#{producto.productos}]]</h1>
                         <div class="muted"> <code>th:field</code>.</div>
                     </div>
-                    <a class="btn btn-outline-secondary" th:href="@{/producto/listado}">Lista de productos</a>
+                    <a class="btn btn-outline-secondary" th:href="@{/producto/listado}">[[#{producto.listado}]]</a>
                 </div>
 
                 <div class="card">
@@ -210,37 +221,37 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Nombre</label>
+                                <label class="form-label">[[#{producto.nombre}]]</label>
                                 <input class="form-control" type="text" th:field="*{nombre}" placeholder="Ej: Eau de Parfum" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Descripción</label>
+                                <label class="form-label">[[#{producto.descripcion}]]</label>
                                 <textarea class="form-control" rows="3" th:field="*{descripcion}" placeholder="Descripción del producto…" ></textarea>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Stock</label>
+                                <label class="form-label">[[#{producto.existencias}]]</label>
                                 <input class="form-control" type="number" th:field="*{stock}" placeholder="0" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Precio</label>
+                                <label class="form-label">[[#{producto.precio}]]</label>
                                 <input class="form-control" type="number" th:field="*{precio}" placeholder="0" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Imagen</label>
+                                <label class="form-label">[[#{producto.imagen}]]</label>
                                 <input class="form-control" type="file" name="imagenFile"
                                        onchange="mostrarImagen(this);" />
                                 <img id="blah" th:src="${producto.rutaImagen}" alt="your image" height="200"/>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Notas de salida</label>
+                                <label class="form-label">[[#{producto.nota.salida}]]</label>
                                 <input class="form-control" type="text" th:field="*{notasSalida}" placeholder="Ej: cítricos" >
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Notas corazón</label>
+                                <label class="form-label">[[#{producto.nota.corazon}]]</label>
                                 <input class="form-control" type="text" th:field="*{notasCorazon}" placeholder="Ej: jazmín" >
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Notas fondo</label>
+                                <label class="form-label">[[#{producto.nota.fondo}]]</label>
                                 <input class="form-control" type="text" th:field="*{notasFondo}" placeholder="Ej: ámbar" >
                             </div>
                             <div class="mb-3">
