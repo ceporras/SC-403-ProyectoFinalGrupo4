@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
-      
+
     <body>
         <script th:src="@{/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js}"></script>
         <link th:href="@{/webjars/font-awesome/css/all.min.css}" rel="stylesheet"/>
@@ -172,6 +172,8 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                     <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]</button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="clearForm()">
+                                    <i class="fa-solid fa-xmark"></i> [[#{accion.limpiar}]]</button>
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa-solid fa-floppy-disk"></i> [[#{accion.guardar}]]</button>
                             </div>
@@ -248,7 +250,7 @@
 
                             <div class="d-flex flex-wrap gap-2 mt-4">
                                 <button class="btn btn-primary" type="submit">[[#{accion.guardar}]]</button>
-                                <button class="btn btn-outline-secondary" type="reset">[[#{accion.limpiar}]]</button>
+                                <button class="btn btn-outline-secondary" onclick="clearForm()">[[#{accion.limpiar}]]</button>
                                 <a class="btn btn-link" th:href="@{/producto/listado}">[[#{accion.regresar}]]</a>
                             </div>
                         </form>

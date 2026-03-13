@@ -29,7 +29,6 @@ public class CategoriaController {
     public String inicio(Model model){
         var categorias = categoriaService.getCategorias(false);
         model.addAttribute("categorias", categorias);
-        model.addAttribute("totalCategorias", categorias.size());
         return "/categoria/listado";
     }
     
@@ -37,10 +36,9 @@ public class CategoriaController {
     private MessageSource messageSource;
     
     @PostMapping("/guardar")
-    public String guardar(@Valid Categoria categoria, @RequestParam MultipartFile imagenFile, RedirectAttributes redirectAttributes){
+    public String guardar(@Valid Categoria categoria, RedirectAttributes redirectAttributes){
         categoriaService.save(categoria);
-        redirectAttributes.addFlashAttribute("todoOk",messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault()));
-        
+        //redirectAttributes.addFlashAttribute("todoOk",messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault()));
         return "redirect:/categoria/listado";
     }
     
@@ -60,7 +58,7 @@ public class CategoriaController {
             titulo ="error";//captura el resto de e
             detalle="categoria.error03";
         }
-        redirectAttributes.addFlashAttribute(titulo,messageSource.getMessage(detalle, null, Locale.getDefault()));
+        //redirectAttributes.addFlashAttribute(titulo,messageSource.getMessage(detalle, null, Locale.getDefault()));
         return "redirect:/categoria/listado";
     }
     

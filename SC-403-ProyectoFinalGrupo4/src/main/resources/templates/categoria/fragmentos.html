@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+    <body>
+
+
+        <section th:fragment="listado">
+            <main class="container py-4">
+
+                <section th:replace="~{categoria/fragmentos :: agregar}"></section>
+                <!--barra de busqueda  -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row g-2 align-items-center mb-3">
+                            <div class="col-md-6">
+                                <input class="form-control" placeholder="Buscar" />
+                            </div>
+                            <div class="col-md-3 d-grid">
+                                <button class="btn btn-outline-primary" type="button">Aplicar</button>
+                            </div>
+                        </div>
+                        <!--tabla de categorias  -->
+                        <div class="table-responsive" th:if="${categorias != null and !categorias.empty}">
+                            <table class="table table-striped align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Activo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="c : ${categorias}">
+                                        <td>[[${c.idCategoria}]]</td>
+                                        <td>[[${c.nombre}]]</td>
+                                        <td th:text="${c.activo} ? 'Activa':'Inactiva'"></td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger"
+                                                    data-bs-toggle="modal" data-bs-target="#confirmModal"
+                                                    th:data-bs-id="${c.idCategoria}"
+                                                    th:data-bs-nombre="${c.nombre}">
+                                                <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
+                                            </button>                                           
+                                            <a th:href="@{/categoria/modificar/}+${c.idCategoria}" class="btn btn-warning">
+                                                <i class="fas fa-pencil-alt"></i> [[#{accion.actualizar}]]
+                                            </a>                                                
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center p-2" th:if="${categorias == null or categorias.empty}">
+                            <span>[[#{lista.vacia}]]</span></div>
+                    </div>
+                </div>
+            </main>
+        </section>
+
+
+
+        <section th:fragment="agregar">
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <div>
+                    <h1 class="h3 mb-0">Categorías</h1>
+                    <div class="muted"> Listado de categorias </div>
+                </div>
+                <div class="d-flex gap-2" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCategoriaModal" >Nueva Categoria</a>
+                </div>
+            </div>
+
+            <!-- Button trigger modal -->
+
+            <div class="modal fade" id="agregarCategoriaModal"  tabindex="-1" 
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                <i class="fa-solid fa-layer-group"></i> [[#{categoria.agregar}]]</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form th:action='@{/categoria/guardar}' th:object='${categorias}'
+                              class='was-validated' enctype="multipart/form-data" method="post">
+                            <div class="modal-body">
+                                <div class='mb-3'>
+                                    <label>[[#{categoria.nombre}]]</label>
+                                    <input type="text" name='nombre' class='form-control' required="true"/></div>
+                                <div class='mb-3'>
+                                    <label>[[#{categoria.activo}]]</label>
+                                    <input type="checkbox" name="activo" class='form-check-input'/></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa-solid fa-floppy-disk"></i> [[#{accion.guardar}]]</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section th:fragment="modificar">
+            <main class="container py-4" style="max-width: 920px;">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                    <div>
+                        <h1 class="h3 mb-0">[[#{categoria.editar}]]</h1>
+
+                    </div>
+                    <a class="btn btn-outline-secondary" th:href="@{/categoria/listado}">[[#{general.volver}]]</a>
+                </div>
+
+                <div class="card">
+                    <div class="card-body p-4">
+                        <form method="POST" th:action="@{/categoria/guardar}" 
+                              th:object="${categoria}" class="was-validated" >
+                            <input type="hidden" name="idCategoria" th:field="*{idCategoria}"/>
+
+                            <div class="mb-3">
+                                <label class="form-label">[[#{categoria.nombre}]]</label>
+                                <input class="form-control" type="text" th:field="*{nombre}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="activo">[[#{categoria.activo}]]</label>
+                                <input class="form-check-input" type="checkbox" 
+                                       name="activo" id="activo" th:field="*{activo}"/>
+                            </div>
+                            <div class="d-flex flex-wrap gap-2 mt-4">
+                                <button class="btn btn-primary" type="submit">[[#{general.guardar}]]</button>
+                                <button class="btn btn-outline-secondary" onclick="clearForm()">[[#{general.limpiar}]]</button>
+                                <a class="btn btn-link" th:href="@{/categoria/listado}">[[#{general.cancelar}]]</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </section>
+
+
+        <section th:fragment="confirmarEliminar">
+            <div class="modal fade" 
+                 id="confirmModal" 
+                 tabindex="-1" 
+                 aria-labelledby="modalLabel" 
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered custom-modal-animation">
+                    <div class="modal-content animate-slide-up">
+                        <form th:action="@{/categoria/eliminar}" th:object="${categoria}" method="post">
+                            <input type="hidden" name="idCategoria" id="modalId"/>
+                            <div class="modal-header bg-warning text-white">
+                                <h5 class="modal-title" id="modalLabel">
+                                    <i class="fa-solid fa-circle-radiation"></i> [[#{accion.confirmar}]]
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>[[#{accion.confirmar.texto1}]] <span id="modalDescripcion"></span>?</p>
+                                <h6>[[#{accion.confirmar.texto2}]]</h6>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        
+        <section th:fragment="mostrarToast">
+            <div aria-live="polite" aria-atomic="true" 
+                 class="position-fixed top-50 start-50 translate-middle" style="z-index: 1080;">                
+                <div th:if="${error}" class="toast show"
+                     role="alert"
+                     aria-live="assertive"                     
+                     aria-atomic="true"
+                     data-bs-autohide="true">
+                    <div class="toast-header text-white bg-danger">
+                        <i class="fa-solid fa-bomb"></i> <strong clas=me-auto> [[#{error}]]</strong>
+                    </div>
+                    <div class="toast-body">
+                        <p>[[${error}]]</p>
+                        <div class="mt-2 pt-2 border-top text-center">
+                            <button type="button" class="btn btn-secondary btn-sm" 
+                                    data-bs-dismiss="toast">[[#{accion.cerrar}]]</button>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${todoOk}" class="toast show"
+                     role="status"
+                     aria-live="polite"
+                     aria-atomic="true"
+                     data-bs-autohide="true">
+                    <div class="toast-header text-white bg-success">
+                        <i class="fa-solid fa-square-check"></i> <strong clas=me-auto> [[#{atencion}]]</strong>
+                    </div>
+                    <div class="toast-body">
+                        <p>[[${todoOk}]]</p>
+                        <div class="mt-2 pt-2 border-top text-center">
+                            <button type="button" class="btn btn-secondary btn-sm" 
+                                    data-bs-dismiss="toast">[[#{accion.cerrar}]]</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        </section>
+
+    </body>
+</html>

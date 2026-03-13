@@ -36,8 +36,8 @@ public class Categoria implements Serializable{
     
     @NotNull
     @Column(nullable = false)
-    private Boolean activo;
-    
+    public boolean activo;
+    //cambio de Boolean a boolean para hacer default a false cuando hay null
     
     @OneToMany(mappedBy = "categoria")
     private List<Producto> productos;

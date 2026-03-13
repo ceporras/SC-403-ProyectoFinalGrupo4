@@ -71,6 +71,6 @@ public class Producto implements Serializable {
     
     @NotNull
     @Column(nullable = false)
-    private Boolean activo;
+    private boolean activo;
     
 }

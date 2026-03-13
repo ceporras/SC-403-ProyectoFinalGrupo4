@@ -15,13 +15,20 @@ function mostrarImagen(input) {
     }
 }
 
+//para limiar text box
+function clearForm() {
+    // Select the form and reset its values to empty strings
+    const form = document.querySelector('form');
+    form.querySelectorAll('input, textarea').forEach(input => input.value = '');
+  }
+
 //Para insertar información en el modal según el registro...
 document.addEventListener('DOMContentLoaded', function () {
     const confirmModal = document.getElementById('confirmModal');
     confirmModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
         document.getElementById('modalId').value = button.getAttribute('data-bs-id');
-        document.getElementById('modalDescripcion').textContent = button.getAttribute('data-bs-descripcion');
+        document.getElementById('modalNombre').textContent = button.getAttribute('data-bs-nombre');
     });
 });
 
