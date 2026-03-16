@@ -1,0 +1,50 @@
+body{
+    background-color:#ffffff;
+    font-family:'Inter', sans-serif;
+    color:#111;
+}
+
+.navbar{
+    background-color:#000;
+    padding:12px 0;
+}
+
+.navbar-brand{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    letter-spacing:2px;
+    color:#d4af37;
+    font-size:20px;
+}
+
+.navbar .nav-link{
+    color:white
+}
+
+.navbar .nav-link:hover{
+    color:#d4af37
+}
+
+.navbar i{
+    color: #000;
+}
+.navbar-brand{
+    color:#d4af37;
+    font-weight:600;
+    letter-spacing:1px;
+}
+.btn-primary{
+    background-color:black;
+    border-color:black;
+    color:white;
+}
+
+.btn-primary:hover{
+    background-color:#d4af37;
+    border-color:#d4af37;
+    color:black;
+}
+
+
+
+

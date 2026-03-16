@@ -60,6 +60,7 @@ public class CategoriaController {
         }
         //redirectAttributes.addFlashAttribute(titulo,messageSource.getMessage(detalle, null, Locale.getDefault()));
         return "redirect:/categoria/listado";
+        
     }
     
     @GetMapping("/modificar/{idCategoria}")
