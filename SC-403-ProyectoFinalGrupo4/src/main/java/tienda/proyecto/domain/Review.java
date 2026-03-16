@@ -63,6 +63,6 @@ public class Review implements Serializable {
     private Producto producto;
     
     @ManyToOne
-    @JoinColumn(name = "id_usuairo")
+    @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 }

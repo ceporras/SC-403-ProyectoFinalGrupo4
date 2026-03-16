@@ -30,8 +30,16 @@ public class Usuario implements Serializable {
     private Integer id_usuario;
 
     @NotNull
-    @Column(length = 100, nullable = false, name = "nombre", unique = true)
+    @Column(length = 50, nullable = false, name = "username", unique = true)
     private String username;
+    
+    @NotNull
+    @Column(length = 50, nullable = false, name = "email", unique = true)
+    private String email;
+    
+    @NotNull
+    @Column(length = 50, nullable = false, name = "nombre")
+    private String nombre;
 
     @NotNull
     @Column(length = 100, nullable = false, name = "primer_apellido")

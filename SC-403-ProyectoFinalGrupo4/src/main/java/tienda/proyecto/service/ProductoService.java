@@ -29,7 +29,9 @@ public class ProductoService {
 
     @Transactional(readOnly = true)
     public Optional<Producto> getProducto(Integer idProducto) {
+
         return productoRepository.findById(idProducto);
+
     }
 
     @Transactional(readOnly = true)

@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/layout :: head('Productos · Listado')}"></head>
     <body>
-        <div>AQUI DEBERIA IR LA PAGINA CUANDO SE HACE CLICK EN UN PRODUCTO</div>
+        <nav th:replace="~{general/layout :: navbar}"></nav>
+        
+        <section th:replace="~{producto/fragmentos :: detalle}"></section>
+        
+                <footer th:replace="~{general/layout :: footer}"></footer>
+        <div th:replace="~{general/layout :: scripts}"></div>
     </body>
 </html>
+
+

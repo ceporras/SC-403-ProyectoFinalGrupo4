@@ -15,4 +15,9 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer>{
     //filtrar productos por categoria    
     @Query(nativeQuery = true, value = "SELECT * FROM producto WHERE id_categoria=:id_categoria")
     public List<Producto> getProductoByCategoria(@Param("id_categoria") int idCategoria);
+    
+    
+    /*
+    @Query(nativeQuery = true, value = "SELECT * FROM producto WHERE id_producto=:id_producto")
+    public Producto getProductoById(@Param("id_producto") int idProducto);*/
 }

@@ -6,6 +6,8 @@
     <body>
         <script th:src="@{/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js}"></script>
         <link th:href="@{/webjars/font-awesome/css/all.min.css}" rel="stylesheet"/>
+
+
         <section th:fragment="listado">
             <main class="container py-4">
                 <section th:replace="~{producto/fragmentos :: agregar}"></section>
@@ -75,17 +77,20 @@
 
 
                         <!-- Cards de los productos -->
-                        <div class="d-flex justify-content-center align-items-center bg-light p-3" style="height: 200px;">
-                            <img th:src="${p.rutaImagen}" class="img-fluid" 
-                                 th:alt="${p.nombre}" 
-                                 style="max-height: 100%; object-fit: contain;"/>
-                        </div>
-                        <div class="card-header bg-white">
-                            <h5 class="card-title text-center text-truncate mb-0" th:text="${p.nombre}">[[#{producto.nombre}]]</h5>
-                        </div>
-                        <div class="card-body d-flex flex-column">
-                            <p class="card-text text-muted mb-auto text-truncate" th:text="${p.descripcion}">[[#{producto.descripcion}]]</p>
-                        </div>
+                        <a th:href="@{/producto/detalle/{id}(id=${p.idProducto})}"
+                           class="text-decoration-none text-dark">
+                            <div class="d-flex justify-content-center align-items-center bg-light p-3" style="height: 200px;">
+                                <img th:src="${p.rutaImagen}" class="img-fluid" 
+                                     th:alt="${p.nombre}" 
+                                     style="max-height: 100%; object-fit: contain;"/>
+                            </div>
+                            <div class="card-header bg-white">
+                                <h5 class="card-title text-center text-truncate mb-0" th:text="${p.nombre}">[[#{producto.nombre}]]</h5>
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <p class="card-text text-muted mb-auto text-truncate" th:text="${p.descripcion}">[[#{producto.descripcion}]]</p>
+                            </div>
+                        </a>
                         <div class="card-footer bg-white d-flex justify-content-between align-items-center">
                             <div class="fw-bold">
                                 <span class="text-success h5" th:text="${#numbers.formatCurrency(p.precio)}">$99.99</span>
@@ -303,6 +308,63 @@
                     </div>
                 </div>
             </div>
+        </section>
+
+
+        <section th:fragment="detalle">
+            <main class="container py-4" style="max-width: 920px;">
+
+                <!--page header -->
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                    <div>
+                        <h1 class="h3 mb-0">Detalle del producto</h1>
+
+                    </div>
+                    <a class="btn btn-outline-secondary" th:href="@{/producto/listado}">[[#{producto.listado}]]</a>
+                </div>
+                <div class="row g-4 align-items-start">
+
+                    <!--imagen left side -->
+
+                    <div class="col-md-5">
+                        <img class="img-fluid rounded"
+                             th:src="${producto.rutaImagen}"
+                             th:alt="${producto.nombre}"
+                             alt="Product Image">
+                    </div>
+                    <!--info del producto -- right side -->
+                    <div class="col-md-7">
+                        <div class="mb-3">
+                            <label class="form-label"><h3 class="text-decoration-underline">[[#{producto.nombre}]]</h3></label>
+                            <h4 th:text="${producto.nombre}"></h4>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><h3 class="text-decoration-underline">[[#{producto.descripcion}]]</h3></label>
+                            <h4 th:text="${producto.descripcion}"></h4>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><h3 class="text-decoration-underline">[[#{producto.existencias}]]</h3></label>
+                            <h4 th:text="${producto.stock}"></h4>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><h3 class="text-decoration-underline">[[#{producto.precio}]]</h3></label>
+                            <h4 th:text="${producto.precio}"></h4>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><h3 class="text-decoration-underline">[[#{producto.nota.salida}]]</h3></label>
+                            <h4 th:text="${producto.notasSalida}"></h4>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><h3 class="text-decoration-underline">[[#{producto.nota.corazon}]]</h3></label>
+                            <h4 th:text="${producto.notasCorazon}"></h4>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><h3 class="text-decoration-underline">[[#{producto.nota.fondo}]]</h3></label>
+                            <h4 th:text="${producto.notasFondo}"></h4>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </section>
 
     </body>
