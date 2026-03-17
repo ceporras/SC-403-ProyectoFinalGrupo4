@@ -94,4 +94,13 @@ public class ProductoController {
         model.addAttribute("categorias", categorias);
         return "/producto/modifica";
     }
+
+    @PostMapping("/carrito/agregar")
+    public String agregarAlCarrito(@RequestParam("idProducto") Integer idProducto,
+            @RequestParam("cantidad") int cantidad) {
+        
+        //pendiente desarrollar logica de carrito
+        
+        return "redirect:/carrito";
+    }
 }

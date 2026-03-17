@@ -335,33 +335,49 @@
                     <!--info del producto -- right side -->
                     <div class="col-md-7">
                         <div class="mb-3">
-                            <label class="form-label"><h3 class="text-decoration-underline">[[#{producto.nombre}]]</h3></label>
-                            <h4 th:text="${producto.nombre}"></h4>
+                            <h5 class="fw-bold">[[#{producto.nombre}]]</h5>
+                            <h5 th:text="${producto.nombre}"></h5>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label"><h3 class="text-decoration-underline">[[#{producto.descripcion}]]</h3></label>
-                            <h4 th:text="${producto.descripcion}"></h4>
+                            <h5 class="fw-bold">[[#{producto.descripcion}]]</h5>
+                            <h5 th:text="${producto.descripcion}"></h5>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label"><h3 class="text-decoration-underline">[[#{producto.existencias}]]</h3></label>
-                            <h4 th:text="${producto.stock}"></h4>
+                            <label class="form-label"><h5 class="fw-bold">[[#{producto.existencias}]]</h5>
+                                <span th:if="${producto.stock > 0}" class="badge text-bg-success ms-2" th:text="${producto.stock} + ' unidades'"></span>
+                                <span th:unless="${producto.stock > 0}" class="badge text-bg-danger ms-2">[[#{producto.estado}]]</span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label"><h3 class="text-decoration-underline">[[#{producto.precio}]]</h3></label>
-                            <h4 th:text="${producto.precio}"></h4>
+                            <h5 class="fw-bold">[[#{producto.precio}]]</h5>
+                            <span class="text-success h5" th:text="${#numbers.formatCurrency(producto.precio)}">$99.99</span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label"><h3 class="text-decoration-underline">[[#{producto.nota.salida}]]</h3></label>
-                            <h4 th:text="${producto.notasSalida}"></h4>
+                            <h5 class="fw-bold">[[#{producto.nota.salida}]]</h5>
+                            <h5 th:text="${producto.notasSalida}"></h5>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label"><h3 class="text-decoration-underline">[[#{producto.nota.corazon}]]</h3></label>
-                            <h4 th:text="${producto.notasCorazon}"></h4>
+                            <h5 class="fw-bold">[[#{producto.nota.corazon}]]</h5>
+                            <h5 th:text="${producto.notasCorazon}"></h5>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label"><h3 class="text-decoration-underline">[[#{producto.nota.fondo}]]</h3></label>
-                            <h4 th:text="${producto.notasFondo}"></h4>
+                            <h5 class="fw-bold">[[#{producto.nota.fondo}]]</h5>
+                            <h5 th:text="${producto.notasFondo}"></h5>
                         </div>
+                        <form th:action="@{/carrito/agregar}" th:method="POST" class="d-inline">
+                            <input type="hidden" th:value="${producto.idProducto}" name="idProducto"/>
+                            <div class="input-group input-group-sm mb-3" style="max-width: 250px;">
+                                <span class="input-group-text">Qty</span>
+                                <input type="number" name="cantidad" class="form-control" 
+                                       value="1" min="1" th:max="${producto.stock}" required>
+
+                                    <!--Boton de add to cart -->
+                                    <button type="submit" 
+                                            class="btn btn-sm btn-primary px-4 text-nowrap" 
+                                            th:disabled="${producto.stock == 0}"
+                                            onclick="addCart(this.form)">
+                                        <i class="fa-solid fa-cart-plus"></i>[[#{producto.agregar.carrito}]]</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </main>
