@@ -1,0 +1,79 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/layout :: head('Carrito · Listado')}"></head>
+    <body>
+        <nav th:replace="~{general/layout :: navbar}"></nav>
+
+
+        <div class="container mt-4">
+            <h2>Carrito de Compras</h2>
+
+            <table class="table table-striped table-bordered mt-3">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Subtotal</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${productosInCart}">
+                        <td>
+                            <div class="d-flex justify-content-center align-items-center bg-light p-3" style="height: 100px;">
+                                <img th:src="${item.producto.rutaImagen}" class="img-fluid" 
+                                     th:alt="${item.producto.nombre}" 
+                                     style="max-height: 100%; object-fit: contain;"/>
+                            </div>
+                        </td>
+                        <td th:text="${item.producto.nombre}"></td>
+                        <td th:text="${item.cantidadCart}"></td>
+                        <td th:text="${#numbers.formatCurrency(item.producto.precio)}"></td>
+                        <td th:text="${#numbers.formatCurrency(item.producto.precio * item.cantidadCart)}"></td>
+                        <td>
+                            <!-- wrap buttons in flex para que no queden uno sobre el otro-->
+                            <div class="d-flex align-items-center gap-2">
+                                <!-- boton de modificar cantidad-->
+                                <form th:action="@{/producto/carrito/actualizar}" method="post" class="d-flex">
+                                    <input type="hidden" name="idProducto" 
+                                           th:value="${item.producto.idProducto}" />
+
+                                    <input type="number" name="cantidad"
+                                           th:value="${item.cantidadCart}"
+                                           min="1" th:max="${item.producto.stock}"
+                                           class="form-control form-control-sm me-2" style="width: 70px;" />
+
+                                    <button class="btn btn-success btn-sm">
+                                        <i class="fa-solid fa-pencil-alt"></i>
+                                    </button>
+                                </form>
+                                <!-- boton de eliminar del carrito -->
+                                <form th:action="@{/producto/carrito/eliminar}" method="post">
+                                    <input type="hidden" name="idProducto" 
+                                           th:value="${item.producto.idProducto}" />
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <form th:action="@{/producto/carrito/checkout}" method="post" class="text-end">
+                <button class="btn btn-lg btn-primary">
+                    Finalizar Compra
+                </button>
+            </form>
+        </div>
+
+
+        <footer th:replace="~{general/layout :: footer}"></footer>
+        <div th:replace="~{general/layout :: scripts}"></div>
+
+    </body>
+</html>

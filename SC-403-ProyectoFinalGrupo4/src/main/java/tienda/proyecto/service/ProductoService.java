@@ -3,13 +3,16 @@ package tienda.proyecto.service;
 import tienda.proyecto.domain.Producto;
 import tienda.proyecto.repository.ProductoRepository;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import tienda.proyecto.domain.CartItem;
 
 @Service
 public class ProductoService {
@@ -78,5 +81,56 @@ public class ProductoService {
         } catch (DataIntegrityViolationException e) {
             throw new IllegalStateException("No se puede eliminar la producto. Tiene datos asociados.", e);
         }
+    }
+
+    public List<CartItem> productsInCart = new ArrayList<>();
+
+    public void addToCart(Integer idProducto, int cantidad) {
+        //buscar si existe en DB
+        Optional<Producto> productoSearch = getProducto(idProducto);
+        CartItem cartItem = new CartItem();
+        try {
+            cartItem.setProducto(productoSearch.get());
+            cartItem.setCantidadCart(cantidad);
+
+            //buscar si producto ya esta en carrito
+            for (CartItem item : productsInCart) {
+                if (item.getProducto().getIdProducto().equals(idProducto)) {
+                    //producto ya existe en el carrito, modificar cantidad
+                    item.setCantidadCart(item.getCantidadCart() + cantidad);
+                    return;
+                }
+            }
+            //producto no estaba en el carrito, agregar nuevo
+            productsInCart.add(cartItem);
+
+        } catch (Exception e) {
+            throw e;
+        }
+
+    }
+
+    public List<CartItem> getCarrito() {
+
+        return productsInCart;
+    }
+
+    public void modificarCarrito(int idProducto, int cantidad){
+        for (CartItem item : productsInCart) {
+            if (item.getProducto().getIdProducto().equals(idProducto)) {
+                item.setCantidadCart(cantidad);
+                break;
+            }
+        }
+    }
+    
+    public void elimiarItemCarrito(int idProducto) {
+        productsInCart.removeIf(item
+                -> item.getProducto().getIdProducto().equals(idProducto)
+        );
+    }
+    
+    public void cartCheckout(){
+        //integrar con pedido
     }
 }

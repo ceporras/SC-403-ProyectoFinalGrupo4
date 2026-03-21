@@ -97,8 +97,9 @@
                                 <span th:if="${p.stock > 0}" class="badge text-bg-success ms-2" th:text="${p.stock} + ' unidades'"></span>
                                 <span th:unless="${p.stock > 0}" class="badge text-bg-danger ms-2">[[#{producto.estado}]]</span>
                             </div>
-                            <form th:action="@{/carrito/agregar}" th:method="POST" class="d-inline">
+                            <form th:action="@{/producto/carrito/agregar}" th:method="POST" class="d-inline">
                                 <input type="hidden" th:value="${p.idProducto}" name="idProducto"/>
+                                <input type="hidden" value="1" name="cantidad"/>
                                 <button type="submit" 
                                         class="btn btn-sm btn-primary" 
                                         th:disabled="${p.stock == 0}"
@@ -206,7 +207,7 @@
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                     <div>
                         <h1 class="h3 mb-0">[[#{producto.productos}]]</h1>
-                        <div class="muted"> <code>th:field</code>.</div>
+                        
                     </div>
                     <a class="btn btn-outline-secondary" th:href="@{/producto/listado}">[[#{producto.listado}]]</a>
                 </div>
@@ -363,7 +364,7 @@
                             <h5 class="fw-bold">[[#{producto.nota.fondo}]]</h5>
                             <h5 th:text="${producto.notasFondo}"></h5>
                         </div>
-                        <form th:action="@{/carrito/agregar}" th:method="POST" class="d-inline">
+                        <form th:action="@{/producto/carrito/agregar}" th:method="POST" class="d-inline">
                             <input type="hidden" th:value="${producto.idProducto}" name="idProducto"/>
                             <div class="input-group input-group-sm mb-3" style="max-width: 250px;">
                                 <span class="input-group-text">Qty</span>

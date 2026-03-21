@@ -98,9 +98,38 @@ public class ProductoController {
     @PostMapping("/carrito/agregar")
     public String agregarAlCarrito(@RequestParam("idProducto") Integer idProducto,
             @RequestParam("cantidad") int cantidad) {
-        
-        //pendiente desarrollar logica de carrito
-        
-        return "redirect:/carrito";
+        productoService.addToCart(idProducto, cantidad);
+        return "redirect:/producto/carrito";
     }
+
+    @GetMapping("/carrito")
+    public String carritoListado(Model model) {
+        var productosInCart = productoService.getCarrito();
+        model.addAttribute("productosInCart", productosInCart);
+
+        return "/producto/carrito";
+    }
+
+    @PostMapping("/carrito/actualizar")
+    public String modificarCarrito(@RequestParam Integer idProducto,
+            @RequestParam int cantidad) {
+
+        productoService.modificarCarrito(idProducto, cantidad);
+        return "redirect:/producto/carrito";
+    }
+
+    @PostMapping("/carrito/eliminar")
+    public String elimarDelCarrito(@RequestParam Integer idProducto) {
+
+        productoService.elimiarItemCarrito(idProducto);
+        return "redirect:/producto/carrito";
+    }
+
+    @PostMapping("/carrito/checkout")
+    public String checkout(Model model) {
+
+        productoService.cartCheckout();
+        return "redirect:/producto/carrito";
+    }
+
 }
