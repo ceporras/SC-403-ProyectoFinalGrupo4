@@ -1,19 +1,28 @@
 package tienda.proyecto.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
 
 @Getter
 @Setter
@@ -27,13 +36,14 @@ public class Usuario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
-    private Integer id_usuario;
+    private Integer idUsuario;
 
     @NotNull
     @Column(length = 50, nullable = false, name = "username", unique = true)
     private String username;
     
     @NotNull
+    @Email
     @Column(length = 50, nullable = false, name = "email", unique = true)
     private String email;
     
@@ -53,10 +63,6 @@ public class Usuario implements Serializable {
     @Column(length = 255, nullable = false, name = "contrasena")
     private String password;
 
-    @NotNull
-    @Size(max = 50)
-    @Column(length = 50, nullable = false, name = "rol")
-    private String role;
     
     @NotNull
     @Column(nullable = false)
@@ -71,4 +77,10 @@ public class Usuario implements Serializable {
     
     @OneToMany(mappedBy = "usuario")
     private List<Telefono> telefono;
+    
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @JoinTable(name = "usuario_rol",
+            joinColumns = @JoinColumn(name = "id_usuario"),
+            inverseJoinColumns = @JoinColumn(name = "id_rol"))
+    private Set<Rol> roles = new HashSet<>();
 }
