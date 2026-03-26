@@ -44,8 +44,6 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Abrir menú">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
-                todo el menu va aqui
                 <div class="collapse navbar-collapse" id="navMain">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item"><a class="nav-link" href="/tienda/listado">Tienda</a></li>
@@ -83,6 +81,7 @@
                                     <a class="dropdown-item" th:href="@{/usuario/listado}">
                                         <i class="fa-solid fa-angle-right me-2"></i>Usuarios
                                     </a>
+
                                 </li>
                                 <li>
                                     <a class="dropdown-item" th:href="@{/usuario/listado}">
@@ -98,6 +97,7 @@
                         </div>
                         <!-- 🔐 LOGGED IN -->
                         <div sec:authorize="isAuthenticated()" class="d-flex gap-2 align-items-center">
+
 
                             <!-- Username -->
                             <span class="text-light small">
@@ -121,6 +121,7 @@
                 <div class="small muted">SC-403 · Proyecto de Programacion Web</div>
             </div>
         </footer>
+
 
         <div th:fragment="scripts">
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

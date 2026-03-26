@@ -36,7 +36,7 @@ public class UsuarioCuentaController {
                                   RedirectAttributes redirectAttributes) {
 
         Usuario usuario = new Usuario();
-        usuario.setId_usuario(1); 
+        usuario.setIdUsuario(1); 
 
         telefono.setUsuario(usuario);
         telefono.setActivo(true);
@@ -52,7 +52,7 @@ public class UsuarioCuentaController {
                                    RedirectAttributes redirectAttributes) {
 
         Usuario usuario = new Usuario();
-        usuario.setId_usuario(1);
+        usuario.setIdUsuario(1);
 
         direccion.setUsuario(usuario);
         direccion.setActivo(true);

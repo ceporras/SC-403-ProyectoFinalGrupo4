@@ -8,6 +8,6 @@ import tienda.proyecto.domain.Direccion;
 
 public interface DireccionRepository extends JpaRepository<Direccion, Integer> {
 
-    @Query("SELECT d FROM Direccion d WHERE d.usuario.id_usuario = :idUsuario")
+    @Query("SELECT d FROM Direccion d WHERE d.usuario.idUsuario = :idUsuario")
     List<Direccion> obtenerDireccionesPorUsuario(@Param("idUsuario") Integer idUsuario);
 }

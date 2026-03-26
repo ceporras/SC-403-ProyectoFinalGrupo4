@@ -8,6 +8,6 @@ import tienda.proyecto.domain.Pedido;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
 
-    @Query("SELECT p FROM Pedido p WHERE p.direccion.usuario.id_usuario = :idUsuario")
+    @Query("SELECT p FROM Pedido p WHERE p.direccion.usuario.idUsuario = :idUsuario")
     List<Pedido> obtenerPedidosPorUsuario(@Param("idUsuario") Integer idUsuario);
 }
