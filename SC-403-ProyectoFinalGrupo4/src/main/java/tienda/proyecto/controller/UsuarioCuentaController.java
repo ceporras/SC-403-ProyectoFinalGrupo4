@@ -37,7 +37,6 @@ public class UsuarioCuentaController {
 
         Usuario usuario = new Usuario();
         usuario.setIdUsuario(1); 
-
         telefono.setUsuario(usuario);
         telefono.setActivo(true);
 
@@ -53,7 +52,6 @@ public class UsuarioCuentaController {
 
         Usuario usuario = new Usuario();
         usuario.setIdUsuario(1);
-
         direccion.setUsuario(usuario);
         direccion.setActivo(true);
 
