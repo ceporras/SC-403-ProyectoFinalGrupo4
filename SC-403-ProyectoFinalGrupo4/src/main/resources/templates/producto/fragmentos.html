@@ -52,7 +52,7 @@
                     <div class="card h-100 shadow-sm position-relative">
 
                         <!-- boton elipse para modificar y borrar -->
-                        <div class="dropdown position-absolute top-0 end-0 m-2" style="z-index:1050;">
+                        <div class="dropdown position-absolute top-0 end-0 m-2" sec:authorize="hasRole('ROLE_ADMIN')" style="z-index:1050;">
                             <button class="btn btn-sm btn-light border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-ellipsis-vertical"></i>
                             </button>
@@ -131,7 +131,7 @@
                  aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header bg-info text-white">
+                        <div class="modal-header modal-bg bg-info text-white">
                             <h1 class="modal-title fs-5" id="exampleModalLabel">
                                 <i class="fa-solid fa-layer-group"></i> [[#{producto.agregar}]]</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

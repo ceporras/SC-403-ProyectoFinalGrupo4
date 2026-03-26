@@ -106,7 +106,7 @@ public class ProductoController {
     public String carritoListado(Model model) {
         var productosInCart = productoService.getCarrito();
         model.addAttribute("productosInCart", productosInCart);
-
+        model.addAttribute("cartCount", productosInCart.size());
         return "/producto/carrito";
     }
 

@@ -33,8 +33,8 @@ public class Pedido implements Serializable {
     private Integer idPedido;
 
     @NotNull
-    @Column(nullable = false)
-    private LocalDate fechaPedido;
+    @Column(name = "fecha", nullable = false)
+private LocalDate fechaPedido;
 
     @NotNull
     @Column(nullable = false)

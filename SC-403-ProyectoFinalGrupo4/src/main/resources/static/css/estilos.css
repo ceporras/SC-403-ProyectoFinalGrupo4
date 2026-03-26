@@ -45,6 +45,24 @@ body{
     color:black;
 }
 
+/*siguientes 3 para que el icono de carrito sea blanco y se pase a negro con hover*/
+.btn-outline-light .fa-cart-plus {
+    color: white;
+}
 
+.btn-outline-light:hover {
+    background-color: white !important;
+    color: black !important;
+}
+
+.btn-outline-light:hover .fa-cart-plus {
+    color: black;
+}
+
+
+/*modal popups color del header*/
+.modal-bg{
+    background-color: #343a40 !important;
+}
 
 
