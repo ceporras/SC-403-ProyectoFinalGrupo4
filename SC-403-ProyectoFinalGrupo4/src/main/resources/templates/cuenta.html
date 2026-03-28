@@ -1,236 +1,197 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Mi cuenta</title>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link th:href="@{/css/estilos.css}" rel="stylesheet">
-    <link th:href="@{/webjars/font-awesome/7.0.0/css/all.min.css}" rel="stylesheet"/>
-    <script th:src="@{/js/rutinas.js}"></script>
-</head>
-<body>
+    <head th:replace="~{general/layout :: head('Usuarios · Listado')}"></head>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom">
-        <div class="container">
-            <a class="navbar-brand fw-normal text-warning" th:href="@{/}">
-                FRAGRANCE AURA
-            </a>
+    <body>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navMain" aria-controls="navMain"
-                    aria-expanded="false" aria-label="Abrir menú">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <nav th:replace="~{general/layout :: navbar}"></nav>
 
-            <div class="collapse navbar-collapse" id="navMain">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/tienda/listado}">Tienda</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/producto/listado}">Productos</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/categoria/listado}">Categorías</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/pedido/listado}">Pedidos</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/factura/listado}">Facturas</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/ticket/listado}">Soporte</a></li>
-                    <li class="nav-item"><a class="nav-link active" th:href="@{/cuenta}">Mi cuenta</a></li>
-                </ul>
-
-                <div class="d-flex gap-2">
-                    <a class="btn btn-outline-light btn-sm" th:href="@{/usuario/listado}">Admin</a>
-                    <a class="btn btn-outline-light btn-sm" th:href="@{/login}">Ingresar</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container mt-5 mb-5">
-        <div class="row mb-4">
-            <div class="col-12">
-                <h1 class="fw-bold">Mi cuenta</h1>
-                <p class="text-muted">Administra tus teléfonos, direcciones y consulta tus pedidos.</p>
-            </div>
-        </div>
-
-        <div th:if="${mensaje}" class="alert alert-success" role="alert" th:text="${mensaje}"></div>
-
-        <div class="row g-4">
-
-            <div class="col-lg-6">
-                <div class="card shadow-sm h-100">
-                    <div class="card-header bg-dark text-white">
-                        <h5 class="mb-0">Mi teléfono</h5>
-                    </div>
-                    <div class="card-body">
-                        <form th:action="@{/cuenta/telefono}" method="post" th:object="${nuevoTelefono}">
-                            <div class="mb-3">
-                                <label class="form-label">Número de teléfono</label>
-                                <input type="number"
-                                       class="form-control"
-                                       th:field="*{telefono}"
-                                       placeholder="Ingrese su teléfono"
-                                       required>
-                            </div>
-
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-dark">Guardar teléfono</button>
-                            </div>
-                        </form>
-
-                        <hr>
-
-                        <div th:if="${#lists.isEmpty(telefonos)}" class="text-muted">
-                            No hay teléfonos registrados.
-                        </div>
-
-                       <div th:each="t : ${telefonos}" class="border rounded p-3 mb-2 bg-light">
-    <div class="d-flex justify-content-between align-items-center">
-        <span>
-            <strong>Teléfono:</strong>
-            <span th:text="${t.telefono}"></span>
-        </span>
-
-       <form th:action="@{'/cuenta/telefono/eliminar/' + ${t.idTelefono}}" method="post">
-    <button class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este teléfono?')">
-        Eliminar
-    </button>
-</form>
-    </div>
-</div>
-                    </div>
+        <div class="container mt-5 mb-5">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h1 class="fw-bold">Mi cuenta</h1>
+                    <p class="text-muted">Administra tus teléfonos, direcciones y consulta tus pedidos.</p>
                 </div>
             </div>
 
-            <div class="col-lg-6">
-                <div class="card shadow-sm h-100">
-                    <div class="card-header bg-dark text-white">
-                        <h5 class="mb-0">Mis direcciones</h5>
-                    </div>
-                    <div class="card-body">
-                        <form th:action="@{/cuenta/direccion}" method="post" th:object="${nuevaDireccion}">
-                            <div class="mb-3">
-                                <label class="form-label">Código postal</label>
-                                <input type="number"
-                                       class="form-control"
-                                       th:field="*{codigoPostal}"
-                                       placeholder="Código postal"
-                                       required>
-                            </div>
+            <div th:if="${mensaje}" class="alert alert-success" role="alert" th:text="${mensaje}"></div>
 
-                            <div class="mb-3">
-                                <label class="form-label">Provincia</label>
-                                <input type="text"
-                                       class="form-control"
-                                       th:field="*{provincia}"
-                                       placeholder="Provincia"
-                                       required>
-                            </div>
+            <div class="row g-4">
 
-                            <div class="mb-3">
-                                <label class="form-label">Cantón</label>
-                                <input type="text"
-                                       class="form-control"
-                                       th:field="*{canton}"
-                                       placeholder="Cantón"
-                                       required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Distrito</label>
-                                <input type="text"
-                                       class="form-control"
-                                       th:field="*{distrito}"
-                                       placeholder="Distrito"
-                                       required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Dirección exacta</label>
-                                <textarea class="form-control"
-                                          th:field="*{direccionExacta}"
-                                          rows="3"
-                                          placeholder="Ingrese la dirección exacta"
-                                          required></textarea>
-                            </div>
-
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-dark">Guardar dirección</button>
-                            </div>
-                        </form>
-
-                        <hr>
-
-                        <div th:if="${#lists.isEmpty(direcciones)}" class="text-muted">
-                            No hay direcciones registradas.
+                <div class="col-lg-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">Mi teléfono</h5>
                         </div>
-
-                       <div th:each="d : ${direcciones}" class="border rounded p-3 mb-2 bg-light">
-
-    <p><strong>Código postal:</strong> <span th:text="${d.codigoPostal}"></span></p>
-    <p><strong>Provincia:</strong> <span th:text="${d.provincia}"></span></p>
-    <p><strong>Cantón:</strong> <span th:text="${d.canton}"></span></p>
-    <p><strong>Distrito:</strong> <span th:text="${d.distrito}"></span></p>
-    <p><strong>Dirección:</strong> <span th:text="${d.direccionExacta}"></span></p>
-
-    <form th:action="@{'/cuenta/direccion/eliminar/' + ${d.idDireccion}}" method="post">
-    <button class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar esta dirección?')">
-        Eliminar dirección
-    </button>
-</form>
-
-</div>
-                </div>
-            </div>
-
-            <div class="col-12">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-dark text-white">
-                        <h5 class="mb-0">Mis pedidos</h5>
-                    </div>
-                    <div class="card-body">
-
-                        <div th:if="${#lists.isEmpty(pedidos)}" class="text-muted">
-                            No hay pedidos registrados.
-                        </div>
-
-                        <div th:each="p : ${pedidos}" class="border rounded p-3 mb-2 bg-light">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <p class="mb-1">
-                                        <strong>ID del pedido:</strong>
-                                        <span th:text="${p.idPedido}"></span>
-                                    </p>
+                        <div class="card-body">
+                            <form th:action="@{/cuenta/telefono}" method="post" th:object="${nuevoTelefono}">
+                                <div class="mb-3">
+                                    <label class="form-label">Número de teléfono</label>
+                                    <input type="number"
+                                           class="form-control"
+                                           th:field="*{telefono}"
+                                           placeholder="Ingrese su teléfono"
+                                           required>
                                 </div>
 
-                                <div class="col-md-4">
-                                    <p class="mb-1">
-                                        <strong>Fecha:</strong>
-                                        <span th:text="${p.fechaPedido}"></span>
-                                    </p>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-dark">Guardar teléfono</button>
+                                </div>
+                            </form>
+
+                            <hr>
+
+                                <div th:if="${#lists.isEmpty(telefonos)}" class="text-muted">
+                                    No hay teléfonos registrados.
                                 </div>
 
-                                <div class="col-md-4">
-                                    <p class="mb-1">
-                                        <strong>Estado:</strong>
-                                        <span th:text="${p.estado}"></span>
-                                    </p>
+                                <div th:each="t : ${telefonos}" class="border rounded p-3 mb-2 bg-light">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>
+                                            <strong>Teléfono:</strong>
+                                            <span th:text="${t.telefono}"></span>
+                                        </span>
+
+                                        <form th:action="@{'/cuenta/telefono/eliminar/' + ${t.idTelefono}}" method="post">
+                                            <button class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este teléfono?')">
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
                         </div>
-
                     </div>
                 </div>
+
+                <div class="col-lg-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">Mis direcciones</h5>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/cuenta/direccion}" method="post" th:object="${nuevaDireccion}">
+                                <div class="mb-3">
+                                    <label class="form-label">Código postal</label>
+                                    <input type="number"
+                                           class="form-control"
+                                           th:field="*{codigoPostal}"
+                                           placeholder="Código postal"
+                                           required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Provincia</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{provincia}"
+                                           placeholder="Provincia"
+                                           required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Cantón</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{canton}"
+                                           placeholder="Cantón"
+                                           required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Distrito</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{distrito}"
+                                           placeholder="Distrito"
+                                           required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Dirección exacta</label>
+                                    <textarea class="form-control"
+                                              th:field="*{direccionExacta}"
+                                              rows="3"
+                                              placeholder="Ingrese la dirección exacta"
+                                              required></textarea>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-dark">Guardar dirección</button>
+                                </div>
+                            </form>
+
+                            <hr>
+
+                                <div th:if="${#lists.isEmpty(direcciones)}" class="text-muted">
+                                    No hay direcciones registradas.
+                                </div>
+
+                                <div th:each="d : ${direcciones}" class="border rounded p-3 mb-2 bg-light">
+
+                                    <p><strong>Código postal:</strong> <span th:text="${d.codigoPostal}"></span></p>
+                                    <p><strong>Provincia:</strong> <span th:text="${d.provincia}"></span></p>
+                                    <p><strong>Cantón:</strong> <span th:text="${d.canton}"></span></p>
+                                    <p><strong>Distrito:</strong> <span th:text="${d.distrito}"></span></p>
+                                    <p><strong>Dirección:</strong> <span th:text="${d.direccionExacta}"></span></p>
+
+                                    <form th:action="@{'/cuenta/direccion/eliminar/' + ${d.idDireccion}}" method="post">
+                                        <button class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar esta dirección?')">
+                                            Eliminar dirección
+                                        </button>
+                                    </form>
+
+                                </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-dark text-white">
+                                <h5 class="mb-0">Mis pedidos</h5>
+                            </div>
+                            <div class="card-body">
+
+                                <div th:if="${#lists.isEmpty(pedidos)}" class="text-muted">
+                                    No hay pedidos registrados.
+                                </div>
+
+                                <div th:each="p : ${pedidos}" class="border rounded p-3 mb-2 bg-light">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <p class="mb-1">
+                                                <strong>ID del pedido:</strong>
+                                                <span th:text="${p.idPedido}"></span>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <p class="mb-1">
+                                                <strong>Fecha:</strong>
+                                                <span th:text="${p.fechaPedido}"></span>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <p class="mb-1">
+                                                <strong>Estado:</strong>
+                                                <span th:text="${p.estado}"></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-
         </div>
-    </div>
 
-    <footer class="border-top py-3 mt-5">
-        <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
-            <div class="small text-muted">© 2026 Perfumería</div>
-            <div class="small text-muted">SC-403 · II Avance</div>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+        <footer th:replace="~{general/layout :: footer}"></footer>
+        <div th:replace="~{general/layout :: scripts}"></div>
+    </body>
 </html>
