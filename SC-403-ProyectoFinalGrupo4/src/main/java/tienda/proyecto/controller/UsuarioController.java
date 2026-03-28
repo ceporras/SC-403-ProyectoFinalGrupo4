@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import tienda.proyecto.service.RolService;
 
 @Controller
 @RequestMapping("/usuario")
@@ -20,17 +21,21 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
     private final MessageSource messageSource;
+    private final RolService rolService;
 
     public UsuarioController(UsuarioService usuarioService,
-            MessageSource messageSource) {
+            MessageSource messageSource, RolService rolService) {
         this.usuarioService = usuarioService;
         this.messageSource = messageSource;
+        this.rolService = rolService;
     }
 
     @GetMapping("/listado")
     public String inicio(Model model) {
         var usuarios = usuarioService.getUsuarios(false);
+        var roles = rolService.getRoles();
         model.addAttribute("usuarios", usuarios);
+        model.addAttribute("roles", roles);
         model.addAttribute("totalUsuarios", usuarios.size());
         return "/usuario/listado";
     }
@@ -95,6 +100,20 @@ public class UsuarioController {
         }
         Usuario usuario = usuarioOpt.get();
         usuario.setPassword("");
+        model.addAttribute("usuario", usuario);
+        return "/usuario/modifica";
+    }
+    
+    @GetMapping("/editar/{idUsuario}")
+    public String editar(@PathVariable("idUsuario") Integer idUsuario,
+            Model model, RedirectAttributes redirectAttributes) {
+        Optional<Usuario> usuarioOpt = usuarioService.getUsuario(idUsuario);
+        if (usuarioOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error",
+                    "El usuario no fue encontrado.");
+            return "redirect:/usuario/listado";
+        }
+        Usuario usuario = usuarioOpt.get();
         model.addAttribute("usuario", usuario);
         return "/usuario/modifica";
     }

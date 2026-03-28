@@ -66,7 +66,7 @@ public class Usuario implements Serializable {
     
     @NotNull
     @Column(nullable = false)
-    private Boolean activo;
+    private boolean activo;
     
     @OneToMany(mappedBy = "usuario")
     private List<Direccion> direccion;

@@ -76,6 +76,7 @@ public class UsuarioService {
 
         //Se valida si la clave se va actualizar o si es un usuario nuevo se debe actualizar...
         var asignarRol = false;
+        //id es null para nuevos usuarios
         if (usuario.getIdUsuario() == null) {
             if (usuario.getPassword() == null || usuario.getPassword().isBlank()) {
                 throw new IllegalArgumentException("La contraseña es obligatoria para nuevos usuarios.");
@@ -91,7 +92,10 @@ public class UsuarioService {
                         .orElseThrow(() -> new IllegalArgumentException("Usuario a modificar no encontrado."));
 
                 // Asignamos la contraseña existente al objeto "usuario" antes de guardarlo.                
-                usuario.setPassword(encriptaClave ? passwordEncoder.encode(usuarioExistente.getPassword()) : usuarioExistente.getPassword());
+                
+                //no se hace encode otra vez, solo se asigna el hash existente en DB
+                //para volverlo a guardar con mismo password
+                usuario.setPassword(usuarioExistente.getPassword());
             } else {
                 // El campo de password NO está vacío (se desea actualizar).
                 // Se encripta y se guarda la nueva contraseña.
@@ -99,9 +103,9 @@ public class UsuarioService {
             }
         }
         
-        //Si se está creando el usuario, se crea el rol por defecto "USER"
+        
         if (asignarRol) {// todo usuario creado tiene rol USUARIO, solo admins pueden crear otros admins
-            Rol rol = rolRepository.findByRol("USUARIO")//admin como test
+            Rol rol = rolRepository.findByRol("USUARIO")
                     .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
 
             usuario.getRoles().add(rol);

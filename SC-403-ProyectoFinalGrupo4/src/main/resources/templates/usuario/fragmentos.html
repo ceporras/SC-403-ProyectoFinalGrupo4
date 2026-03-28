@@ -56,6 +56,16 @@
                                     <label>[[#{usuario.correo}]]</label>
                                     <input type="email" name='email' class='form-control' maxlength="75" required/>                                   
                                 </div>
+                                <div class="col-md-3">
+                                    <label>Rol</label>
+                                    <select name="rol.idRol" 
+                                            class="form-select w-auto" 
+                                            aria-label="Default select example">
+                                        <option th:each="r : ${roles}" th:value="${r.idRol}">
+                                            [[${r.rol}]]
+                                        </option>
+                                    </select>
+                                </div>
 
                                 <div class='mb-3'>
                                     <label>[[#{usuario.activo}]]</label>
@@ -91,22 +101,30 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th scope="col">[[#{usuario.username}]]</th>
                                         <th scope="col">[[#{usuario.nombre}]]</th>
-                                        <th scope="col">[[#{usuario.apellidos}]]</th>
-                                        <th scope="col">[[#{usuario.apellidos}]]</th>
+                                        <th scope="col">[[#{usuario.1apellido}]]</th>
+                                        <th scope="col">[[#{usuario.2apellido}]]</th>
                                         <th scope="col">[[#{usuario.correo}]]</th>
                                         <th scope="col">[[#{usuario.activo}]]</th>
                                         <th scope="col">Roles</th>
+                                        <th scope="col">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="u : ${usuarios}">
                                         <td>[[${u.idUsuario}]]</td>
+                                        <td>[[${u.username}]]</td>
                                         <td>[[${u.nombre}]]</td>
                                         <td>[[${u.primerApellido}]]</td>
                                         <td>[[${u.segundoApellido}]]</td>
                                         <td>[[${u.email}]]</td>
                                         <td th:text="${u.activo} ? 'Activa':'Inactiva'"></td>
+                                        <td>
+                                            <span th:each="r, iterStat : ${u.roles}">
+                                                <span th:text="${r.rol}"></span><span th:if="${!iterStat.last}">, </span>
+                                            </span>
+                                        </td>
                                         <td  sec:authorize="hasRole('ROLE_ADMIN')">
                                             <button type="button" class="btn btn-danger"
                                                     data-bs-toggle="modal" data-bs-target="#confirmModal"
@@ -114,7 +132,7 @@
                                                     th:data-bs-descripcion="${u.nombre} + ${u.primerApellido}">
                                                 <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
                                             </button>                                           
-                                            <a th:href="@{/usuario/modificar/}+${u.idUsuario}" class="btn btn-warning">
+                                            <a th:href="@{/usuario/editar/}+${u.idUsuario}" class="btn btn-warning">
                                                 <i class="fas fa-pencil-alt"></i> [[#{accion.actualizar}]]
                                             </a>                                                
                                         </td>
@@ -175,14 +193,14 @@
                                             </div>
                                         </div>
                                         <div class='mb-3'>
-                                            <label>[[#{usuario.apellidos}]]</label>
+                                            <label>[[#{usuario.1apellido}]]</label>
                                             <input type="text" name='primerApellido' th:field='*{primerApellido}' class='form-control' maxlength="30" required/>
                                             <div th:if="${#fields.hasErrors('primerApellido')}" class="text-danger">
                                                 <p th:errors="*{primerApellido}"></p>
                                             </div>
                                         </div>
                                         <div class='mb-3'>
-                                            <label>[[#{usuario.apellidos}]]</label>
+                                            <label>[[#{usuario.2apellido}]]</label>
                                             <input type="text" name='segundoApellido' th:field='*{segundoApellido}' class='form-control' maxlength="30" required/>
                                             <div th:if="${#fields.hasErrors('segundoApellido')}" class="text-danger">
                                                 <p th:errors="*{segundoApellido}"></p>

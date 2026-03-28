@@ -46,19 +46,19 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navMain">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="/tienda/listado">Tienda</a></li>
                         <li class="nav-item"><a class="nav-link" href="/producto/listado">Productos</a></li>
                         <li class="nav-item"><a class="nav-link" href="/categoria/listado">Categorías</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/pedido/listado">Pedidos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/factura/listado">Facturas</a></li>
+                        <li class="nav-item"><a class="nav-link" sec:authorize="hasRole('ROLE_VENDEDOR')" href="/pedido/listado">Pedidos</a></li>
+                        <li class="nav-item"><a class="nav-link" sec:authorize="hasRole('ROLE_VENDEDOR')" href="/factura/listado">Facturas</a></li>
                         <li class="nav-item"><a class="nav-link" href="/ticket/listado">Soporte</a></li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/cuenta}">Mi cuenta</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/tienda/listado">Contacto</a></li>
                     </ul>
 
                     <div class="d-flex gap-2">
 
                         <!-- boton de carrito -->
-                        <a class="btn btn-outline-light btn-sm position-relative" th:href="@{/producto/carrito}">
+                        <a class="btn btn-outline-light btn-sm position-relative" th:href="@{/producto/carrito}" sec:authorize="hasRole('ROLE_USUARIO')">
                             <i class="fa-solid fa-cart-plus"></i>Carrito
                             <!-- para mostrar un icono de cuantos items en carrito-->
                             <span th:if="${cartCount > 0}"
@@ -103,7 +103,6 @@
                             <span class="text-light small">
                                 Hola, <span sec:authentication="name"></span>
                             </span>
-                            <a class="btn btn-outline-light btn-sm" href="/usuario/perfil">Perfil</a>
                             <!-- Logout -->
                             <form th:action="@{/logout}" method="post">
                                 <button class="btn btn-outline-danger btn-sm" type="submit">Salir</button>
