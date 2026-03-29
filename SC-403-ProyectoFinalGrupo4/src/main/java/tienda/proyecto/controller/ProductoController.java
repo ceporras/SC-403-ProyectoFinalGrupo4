@@ -7,6 +7,8 @@ import java.util.Locale;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import tienda.proyecto.domain.Usuario;
 import tienda.proyecto.service.CategoriaService;
+import tienda.proyecto.service.UsuarioService;
 
 @Controller
 @RequestMapping("/producto")
@@ -27,6 +31,8 @@ public class ProductoController {
     private ProductoService productoService;
     @Autowired
     private CategoriaService categoriaService;
+    @Autowired
+    private UsuarioService usuarioService;
     @Autowired
     private MessageSource messageSource;
 
@@ -95,16 +101,32 @@ public class ProductoController {
         return "/producto/modifica";
     }
 
+    public Usuario getLoggedInUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        //System.out.println("!!!!!!!!!!!printing logged in user: "+username+"!!!!!!!!!!!!");
+        var usuario = usuarioService.getUsuarioPorUsername(username);
+        return usuario.get();
+    }
+
     @PostMapping("/carrito/agregar")
-    public String agregarAlCarrito(@RequestParam("idProducto") Integer idProducto,
+    public String agregarAlCarrito(@RequestParam("idProducto") int idProducto,
             @RequestParam("cantidad") int cantidad) {
-        productoService.addToCart(idProducto, cantidad);
+
+        Optional<Producto> productoOpt = productoService.getProducto(idProducto);
+        Producto producto = productoOpt.get();
+
+        //
+        Usuario usuario = getLoggedInUser();
+        //productoService.addToCart(idProducto, cantidad);
+        productoService.addToCart(usuario, producto, cantidad);
         return "redirect:/producto/carrito";
     }
 
     @GetMapping("/carrito")
     public String carritoListado(Model model) {
-        var productosInCart = productoService.getCarrito();
+        Usuario usuario = getLoggedInUser();
+        var productosInCart = productoService.getCart(usuario);
         model.addAttribute("productosInCart", productosInCart);
         model.addAttribute("cartCount", productosInCart.size());
         return "/producto/carrito";

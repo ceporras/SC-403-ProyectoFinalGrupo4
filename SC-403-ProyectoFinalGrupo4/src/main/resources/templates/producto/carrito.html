@@ -31,9 +31,9 @@
                             </div>
                         </td>
                         <td th:text="${item.producto.nombre}"></td>
-                        <td th:text="${item.cantidadCart}"></td>
+                        <td th:text="${item.cantidad}"></td>
                         <td th:text="${#numbers.formatCurrency(item.producto.precio)}"></td>
-                        <td th:text="${#numbers.formatCurrency(item.producto.precio * item.cantidadCart)}"></td>
+                        <td th:text="${#numbers.formatCurrency(item.producto.precio * item.cantidad)}"></td>
                         <td>
                             <!-- wrap buttons in flex para que no queden uno sobre el otro-->
                             <div class="d-flex align-items-center gap-2">
@@ -43,7 +43,7 @@
                                            th:value="${item.producto.idProducto}" />
 
                                     <input type="number" name="cantidad"
-                                           th:value="${item.cantidadCart}"
+                                           th:value="${item.cantidad}"
                                            min="1" th:max="${item.producto.stock}"
                                            class="form-control form-control-sm me-2" style="width: 70px;" />
 

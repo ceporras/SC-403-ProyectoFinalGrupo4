@@ -12,7 +12,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import tienda.proyecto.domain.Carrito;
 import tienda.proyecto.domain.CartItem;
+import tienda.proyecto.domain.Usuario;
+import tienda.proyecto.repository.CarritoRepository;
 
 @Service
 public class ProductoService {
@@ -21,6 +24,9 @@ public class ProductoService {
     private ProductoRepository productoRepository;
     @Autowired
     private FirebaseStorageService firebaseStorageService;
+    
+    @Autowired
+    private CarritoRepository carritoRepository;
 
     @Transactional(readOnly = true)
     public List<Producto> getProductos(boolean activo) {
@@ -83,8 +89,10 @@ public class ProductoService {
         }
     }
 
+    //remover luego
     public List<CartItem> productsInCart = new ArrayList<>();
 
+    /*
     public void addToCart(Integer idProducto, int cantidad) {
         //buscar si existe en DB
         Optional<Producto> productoSearch = getProducto(idProducto);
@@ -108,11 +116,38 @@ public class ProductoService {
             throw e;
         }
 
+    }*/
+    
+    
+    public void addToCart(Usuario usuario, Producto producto, int cantidad){
+        //validar si ya existe producto en el carrito
+        Optional<Carrito> existe = carritoRepository.findByUsuarioAndProducto(usuario, producto);
+        
+        if (existe.isPresent()){
+            Carrito cart = existe.get();
+            //validar esta logica sobre bajar cantidad
+            cart.setCantidad(cart.getCantidad()+ cantidad);
+            //cart.setCantidad(cantidad);
+            //guardar solo modificando cantidad
+            carritoRepository.save(cart);
+        }else{
+            Carrito cart = new Carrito();
+            cart.setUsuario(usuario);
+            cart.setProducto(producto);
+            cart.setCantidad(cantidad);
+            carritoRepository.save(cart);
+            
+        }
+        
     }
 
-    public List<CartItem> getCarrito() {
+    /*public List<CartItem> getCarrito() {
 
         return productsInCart;
+    }*/
+    
+    public List<Carrito> getCart(Usuario usuario){
+        return carritoRepository.findByUsuario(usuario);
     }
 
     public void modificarCarrito(int idProducto, int cantidad){

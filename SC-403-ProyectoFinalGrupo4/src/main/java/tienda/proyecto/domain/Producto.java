@@ -73,4 +73,8 @@ public class Producto implements Serializable {
     @Column(nullable = false)
     private boolean activo;
     
+    @OneToMany(mappedBy = "producto")
+    private List<Carrito> carrito;
+    
+    
 }
