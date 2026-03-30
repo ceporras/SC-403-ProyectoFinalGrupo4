@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import tienda.proyecto.domain.Direccion;
 import tienda.proyecto.domain.Pedido;
 import tienda.proyecto.domain.Telefono;
+import tienda.proyecto.domain.Usuario;
 import tienda.proyecto.repository.DireccionRepository;
 import tienda.proyecto.repository.PedidoRepository;
 import tienda.proyecto.repository.TelefonoRepository;
@@ -22,25 +23,31 @@ public class UsuarioCuentaService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    public List<Telefono> listarTelefonos(Integer idUsuario) {
-        return telefonoRepository.obtenerTelefonosPorUsuario(idUsuario);
+    public List<Telefono> listarTelefonos(Usuario usuario) {
+        return telefonoRepository.obtenerTelefonosPorUsuario(usuario.getIdUsuario());
     }
 
     public void guardarTelefono(Telefono telefono) {
         telefonoRepository.save(telefono);
     }
 
-    public List<Direccion> listarDirecciones(Integer idUsuario) {
-        return direccionRepository.obtenerDireccionesPorUsuario(idUsuario);
+    public List<Direccion> listarDirecciones(Usuario usuario) {
+        return direccionRepository.obtenerDireccionesPorUsuario(usuario.getIdUsuario());
     }
 
     public void guardarDireccion(Direccion direccion) {
         direccionRepository.save(direccion);
     }
 
-    public List<Pedido> listarPedidos(Integer idUsuario) {
-        return pedidoRepository.obtenerPedidosPorUsuario(idUsuario);
+    /*public List<Pedido> listarPedidos(Usuario usuario) {
+        return pedidoRepository.obtenerPedidosPorUsuario(usuario.getIdUsuario());
+    }*/
+    
+    public List<Pedido> listarPedidos(Usuario usuario) {
+        return pedidoRepository.findByUsuario(usuario);
     }
+    
+    
     public void eliminarTelefono(Integer idTelefono) {
     telefonoRepository.deleteById(idTelefono);
 }

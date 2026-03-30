@@ -22,7 +22,7 @@
             <div class="row g-4">
 
                 <div class="col-lg-6">
-                    <div class="card shadow-sm h-100">
+                    <div class="card shadow-sm h-auto">
                         <div class="card-header bg-dark text-white">
                             <h5 class="mb-0">Mi teléfono</h5>
                         </div>
@@ -64,10 +64,49 @@
                                 </div>
                         </div>
                     </div>
+                    <div class="col-12">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-dark text-white">
+                                <h5 class="mb-0">Mis pedidos</h5>
+                            </div>
+                            <div class="card-body">
+
+                                <div th:if="${#lists.isEmpty(pedidos)}" class="text-muted">
+                                    No hay pedidos registrados.
+                                </div>
+
+                                <div th:each="p : ${pedidos}" class="border rounded p-3 mb-2 bg-light">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <p class="mb-1">
+                                                <strong>ID del pedido:</strong>
+                                                <span th:text="${p.idPedido}"></span>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <p class="mb-1">
+                                                <strong>Fecha:</strong>
+                                                <span th:text="${p.fechaPedido}"></span>
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <p class="mb-1">
+                                                <strong>Estado:</strong>
+                                                <span th:text="${p.estado}"></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-lg-6">
-                    <div class="card shadow-sm h-100">
+                    <div class="card shadow-sm h-auto">
                         <div class="card-header bg-dark text-white">
                             <h5 class="mb-0">Mis direcciones</h5>
                         </div>
@@ -147,45 +186,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12">
-                        <div class="card shadow-sm">
-                            <div class="card-header bg-dark text-white">
-                                <h5 class="mb-0">Mis pedidos</h5>
-                            </div>
-                            <div class="card-body">
-
-                                <div th:if="${#lists.isEmpty(pedidos)}" class="text-muted">
-                                    No hay pedidos registrados.
-                                </div>
-
-                                <div th:each="p : ${pedidos}" class="border rounded p-3 mb-2 bg-light">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <p class="mb-1">
-                                                <strong>ID del pedido:</strong>
-                                                <span th:text="${p.idPedido}"></span>
-                                            </p>
-                                        </div>
-
-                                        <div class="col-md-4">
-                                            <p class="mb-1">
-                                                <strong>Fecha:</strong>
-                                                <span th:text="${p.fechaPedido}"></span>
-                                            </p>
-                                        </div>
-
-                                        <div class="col-md-4">
-                                            <p class="mb-1">
-                                                <strong>Estado:</strong>
-                                                <span th:text="${p.estado}"></span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
+                    
 
                 </div>
             </div>

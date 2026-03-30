@@ -22,29 +22,29 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="item : ${productosInCart}">
+                    <tr th:each="cartItem : ${productosInCart}">
                         <td>
                             <div class="d-flex justify-content-center align-items-center bg-light p-3" style="height: 100px;">
-                                <img th:src="${item.producto.rutaImagen}" class="img-fluid" 
-                                     th:alt="${item.producto.nombre}" 
+                                <img th:src="${cartItem.producto.rutaImagen}" class="img-fluid" 
+                                     th:alt="${cartItem.producto.nombre}" 
                                      style="max-height: 100%; object-fit: contain;"/>
                             </div>
                         </td>
-                        <td th:text="${item.producto.nombre}"></td>
-                        <td th:text="${item.cantidad}"></td>
-                        <td th:text="${#numbers.formatCurrency(item.producto.precio)}"></td>
-                        <td th:text="${#numbers.formatCurrency(item.producto.precio * item.cantidad)}"></td>
+                        <td th:text="${cartItem.producto.nombre}"></td>
+                        <td th:text="${cartItem.cantidad}"></td>
+                        <td th:text="${#numbers.formatCurrency(cartItem.producto.precio)}"></td>
+                        <td th:text="${#numbers.formatCurrency(cartItem.producto.precio * cartItem.cantidad)}"></td>
                         <td>
                             <!-- wrap buttons in flex para que no queden uno sobre el otro-->
                             <div class="d-flex align-items-center gap-2">
                                 <!-- boton de modificar cantidad-->
                                 <form th:action="@{/producto/carrito/actualizar}" method="post" class="d-flex">
                                     <input type="hidden" name="idProducto" 
-                                           th:value="${item.producto.idProducto}" />
+                                           th:value="${cartItem.producto.idProducto}" />
 
                                     <input type="number" name="cantidad"
-                                           th:value="${item.cantidad}"
-                                           min="1" th:max="${item.producto.stock}"
+                                           th:value="${cartItem.cantidad}"
+                                           min="1" th:max="${cartItem.producto.stock}"
                                            class="form-control form-control-sm me-2" style="width: 70px;" />
 
                                     <button class="btn btn-success btn-sm">
@@ -54,7 +54,7 @@
                                 <!-- boton de eliminar del carrito -->
                                 <form th:action="@{/producto/carrito/eliminar}" method="post">
                                     <input type="hidden" name="idProducto" 
-                                           th:value="${item.producto.idProducto}" />
+                                           th:value="${cartItem.producto.idProducto}" />
                                     <button class="btn btn-danger btn-sm">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>

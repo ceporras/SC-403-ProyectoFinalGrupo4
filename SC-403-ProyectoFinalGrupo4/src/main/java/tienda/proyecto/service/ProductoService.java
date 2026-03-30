@@ -89,45 +89,15 @@ public class ProductoService {
         }
     }
 
-    //remover luego
-    public List<CartItem> productsInCart = new ArrayList<>();
-
-    /*
-    public void addToCart(Integer idProducto, int cantidad) {
-        //buscar si existe en DB
-        Optional<Producto> productoSearch = getProducto(idProducto);
-        CartItem cartItem = new CartItem();
-        try {
-            cartItem.setProducto(productoSearch.get());
-            cartItem.setCantidadCart(cantidad);
-
-            //buscar si producto ya esta en carrito
-            for (CartItem item : productsInCart) {
-                if (item.getProducto().getIdProducto().equals(idProducto)) {
-                    //producto ya existe en el carrito, modificar cantidad
-                    item.setCantidadCart(item.getCantidadCart() + cantidad);
-                    return;
-                }
-            }
-            //producto no estaba en el carrito, agregar nuevo
-            productsInCart.add(cartItem);
-
-        } catch (Exception e) {
-            throw e;
-        }
-
-    }*/
     
-    
+    @Transactional
     public void addToCart(Usuario usuario, Producto producto, int cantidad){
         //validar si ya existe producto en el carrito
         Optional<Carrito> existe = carritoRepository.findByUsuarioAndProducto(usuario, producto);
         
         if (existe.isPresent()){
             Carrito cart = existe.get();
-            //validar esta logica sobre bajar cantidad
             cart.setCantidad(cart.getCantidad()+ cantidad);
-            //cart.setCantidad(cantidad);
             //guardar solo modificando cantidad
             carritoRepository.save(cart);
         }else{
@@ -141,31 +111,20 @@ public class ProductoService {
         
     }
 
-    /*public List<CartItem> getCarrito() {
-
-        return productsInCart;
-    }*/
-    
+    @Transactional(readOnly=true)
     public List<Carrito> getCart(Usuario usuario){
         return carritoRepository.findByUsuario(usuario);
     }
 
-    public void modificarCarrito(int idProducto, int cantidad){
-        for (CartItem item : productsInCart) {
-            if (item.getProducto().getIdProducto().equals(idProducto)) {
-                item.setCantidadCart(cantidad);
-                break;
-            }
-        }
+    @Transactional
+    public void modificarCarrito(int idUsuario, int idProducto, int cantidad){
+                
+        carritoRepository.updateCantidadByProductoId(cantidad, idProducto, idUsuario);
+
+    }
+    @Transactional
+    public void elimiarItemCarrito(Usuario usuario, Producto producto) {
+        carritoRepository.deleteByUsuarioAndProducto(usuario, producto);
     }
     
-    public void elimiarItemCarrito(int idProducto) {
-        productsInCart.removeIf(item
-                -> item.getProducto().getIdProducto().equals(idProducto)
-        );
-    }
-    
-    public void cartCheckout(){
-        //integrar con pedido
-    }
 }

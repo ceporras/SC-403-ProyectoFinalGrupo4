@@ -64,7 +64,7 @@ public class Direccion implements Serializable {
     private List<Pedido> pedido;
     
     //un usuario tiene 1:n direcciones
-    @ManyToOne
-    @JoinColumn(name = "id_usuario")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 }

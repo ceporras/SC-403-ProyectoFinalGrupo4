@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -45,7 +46,8 @@ public class Factura implements Serializable {
     @Column(nullable = false)
     private Boolean activo;
     
-    @ManyToOne
-    @JoinColumn(name = "id_pedido")
+    //una sola factura por pedido 1:1
+    @OneToOne
+    @JoinColumn(name = "id_pedido", nullable = false)
     private Pedido pedido;
 }

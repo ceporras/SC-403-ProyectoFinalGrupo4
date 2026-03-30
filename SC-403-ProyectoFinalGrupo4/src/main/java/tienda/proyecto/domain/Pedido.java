@@ -1,5 +1,6 @@
 package tienda.proyecto.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -42,12 +44,17 @@ private LocalDate fechaPedido;
     private String estado;
 
     //relacion a tabla intermedia
-    @OneToMany(mappedBy = "pedido")
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval=true)
     private List<DetallePedido> detallePedido;
 
-    @OneToMany(mappedBy = "pedido")
-    private List<Factura> factura;
+    //una sola factura por pedido 1:1
+    @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private Factura factura;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_usuario", nullable=false)
+    private Usuario usuario;
+    
     //una direccion tiene varios pedidos
     @ManyToOne
     @JoinColumn(name = "id_direccion")

@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import tienda.proyecto.domain.Carrito;
+import tienda.proyecto.domain.Pedido;
 import tienda.proyecto.domain.Usuario;
 import tienda.proyecto.service.CategoriaService;
+import tienda.proyecto.service.PedidoService;
 import tienda.proyecto.service.UsuarioService;
 
 @Controller
@@ -33,6 +36,8 @@ public class ProductoController {
     private CategoriaService categoriaService;
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private PedidoService pedidoService;
     @Autowired
     private MessageSource messageSource;
 
@@ -104,7 +109,6 @@ public class ProductoController {
     public Usuario getLoggedInUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-        //System.out.println("!!!!!!!!!!!printing logged in user: "+username+"!!!!!!!!!!!!");
         var usuario = usuarioService.getUsuarioPorUsername(username);
         return usuario.get();
     }
@@ -116,9 +120,8 @@ public class ProductoController {
         Optional<Producto> productoOpt = productoService.getProducto(idProducto);
         Producto producto = productoOpt.get();
 
-        //
+        //sacar usuario logueado para asignarle el carrito
         Usuario usuario = getLoggedInUser();
-        //productoService.addToCart(idProducto, cantidad);
         productoService.addToCart(usuario, producto, cantidad);
         return "redirect:/producto/carrito";
     }
@@ -128,6 +131,7 @@ public class ProductoController {
         Usuario usuario = getLoggedInUser();
         var productosInCart = productoService.getCart(usuario);
         model.addAttribute("productosInCart", productosInCart);
+
         model.addAttribute("cartCount", productosInCart.size());
         return "/producto/carrito";
     }
@@ -135,23 +139,27 @@ public class ProductoController {
     @PostMapping("/carrito/actualizar")
     public String modificarCarrito(@RequestParam Integer idProducto,
             @RequestParam int cantidad) {
-
-        productoService.modificarCarrito(idProducto, cantidad);
+        Usuario usuario = getLoggedInUser();
+        
+        productoService.modificarCarrito(usuario.getIdUsuario(), idProducto, cantidad);
         return "redirect:/producto/carrito";
     }
 
     @PostMapping("/carrito/eliminar")
     public String elimarDelCarrito(@RequestParam Integer idProducto) {
-
-        productoService.elimiarItemCarrito(idProducto);
+        Usuario usuario = getLoggedInUser();
+        Producto producto = productoService.getProducto(idProducto).get();
+        
+        productoService.elimiarItemCarrito(usuario, producto);
         return "redirect:/producto/carrito";
     }
 
     @PostMapping("/carrito/checkout")
     public String checkout(Model model) {
-
-        productoService.cartCheckout();
-        return "redirect:/producto/carrito";
+        //sacar usuario logueado para pasarlo a pedido
+        Usuario usuario = getLoggedInUser();
+        Pedido pedido = pedidoService.crearPedido(usuario);
+        return "redirect:/pedido/"+ pedido.getIdPedido() +"/crear";
     }
 
 }

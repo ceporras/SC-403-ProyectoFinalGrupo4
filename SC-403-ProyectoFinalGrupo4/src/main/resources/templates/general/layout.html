@@ -47,7 +47,7 @@
                 <div class="collapse navbar-collapse" id="navMain">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item"><a class="nav-link" href="/producto/listado">Productos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/categoria/listado">Categorías</a></li>
+                        <li class="nav-item"><a class="nav-link" sec:authorize="hasRole('ROLE_VENDEDOR')" href="/categoria/listado">Categorías</a></li>
                         <li class="nav-item"><a class="nav-link" sec:authorize="hasRole('ROLE_VENDEDOR')" href="/pedido/listado">Pedidos</a></li>
                         <li class="nav-item"><a class="nav-link" sec:authorize="hasRole('ROLE_VENDEDOR')" href="/factura/listado">Facturas</a></li>
                         <li class="nav-item"><a class="nav-link" href="/ticket/listado">Soporte</a></li>

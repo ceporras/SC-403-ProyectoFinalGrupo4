@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/layout :: head('Carrito · Listado')}"></head>
+    <body>
+        <nav th:replace="~{general/layout :: navbar}"></nav>
+
+        <div th:fragment="pedidoConfirmar">
+            <form th:action="@{/pedido/confirmar}" method="post">
+
+                <input type="hidden" name="idPedido" th:value="${pedido.idPedido}" />
+
+                <label>Seleccionar dirección:</label>
+                <select name="idDireccion" class="form-select">
+                    <option th:each="d : ${direcciones}"
+                            th:value="${d.idDireccion}"
+                            th:text="${d.provincia + ' - ' + d.canton + ' - ' + d.direccionExacta}">
+                    </option>
+                </select>
+
+                <label>Método de pago:</label>
+                <select name="metodoPago" class="form-select">
+                    <option value="TARJETA">Tarjeta</option>
+                    <option value="SINPE">SINPE</option>
+                </select>
+
+                <button class="btn btn-primary mt-3">Confirmar compra</button>
+
+            </form>
+        </div>
+        
+        <footer th:replace="~{general/layout :: footer}"></footer>
+        <div th:replace="~{general/layout :: scripts}"></div>
+    </body>
+
+</html>
