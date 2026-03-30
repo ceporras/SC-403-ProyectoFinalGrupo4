@@ -1,50 +1,24 @@
 <!doctype html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-  <head th:replace="~{general/layout :: head('Inicio')}"></head>
-  <body>
-    <nav th:replace="~{general/layout :: navbar}"></nav>
+    <head th:replace="~{general/layout :: head('Inicio')}"></head>
+    <body>
+        <nav th:replace="~{general/layout :: navbar}"></nav>
 
-    <main class="container py-4">
-      <div class="p-4 p-md-5 mb-4 rounded-3 border bg-body">
-        <div class="container-fluid py-2">
-          <h1 class="display-6 fw-semibold">Tienda de perfumes</h1>
-          <p class="col-md-8 fs-5 muted mb-3">
-            Plantillas base (vacías) para montar Thymeleaf + CRUD.
-          </p>
-          <div class="d-flex flex-wrap gap-2">
-            <a class="btn btn-primary" href="/tienda/listado">Ver catálogo</a>
-            <a class="btn btn-outline-secondary" href="/producto/listado">CRUD Productos</a>
-            <a class="btn btn-outline-secondary" href="/categoria/listado">CRUD Categorías</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="row g-3">
-        <div class="col-md-6">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title">Objetivo de estas vistas</h5>
-              <p class="card-text muted mb-0">
-              </p>
+        <main class="portada">
+            <div class="portada-overlay">
+                <div class="portada-content">
+                    <h1>FRAGRANCE AURA</h1>
+                    <p>
+                        Conoce nuestro catálogo de perfumes originales.
+                        Descubre fragancias exclusivas.
+                    </p>
+                    <a class="nav-link" th:href="@{/producto/listado}">CATÁLOGO</a>  
+                    </a>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title"> </h5>
-              <ul class="mb-0">
-                <li>Agregar <code>th:action</code> y bindings de modelo.</li>
-                <li> <code>th:each</code>.</li>
-                <li>Validaciones y mensajes de error.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
+        </main>
 
-    <footer th:replace="~{general/layout :: footer}"></footer>
-    <div th:replace="~{general/layout :: scripts}"></div>
-  </body>
+        <footer th:replace="~{general/layout :: footer}"></footer>
+        <div th:replace="~{general/layout :: scripts}"></div>
+    </body>
 </html>
