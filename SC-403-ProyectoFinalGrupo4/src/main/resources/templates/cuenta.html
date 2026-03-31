@@ -76,28 +76,30 @@
                                 </div>
 
                                 <div th:each="p : ${pedidos}" class="border rounded p-3 mb-2 bg-light">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <p class="mb-1">
-                                                <strong>ID del pedido:</strong>
-                                                <span th:text="${p.idPedido}"></span>
-                                            </p>
-                                        </div>
+                                    <a class="text-decoration-none text-dark link-underline link-underline-opacity-0" th:href="@{/pedido/detalle/{id}(id=${p.idPedido})}">
+                                       <div class="row">
+                                            <div class="col-md-4">
+                                                <p class="mb-1">
+                                                    <strong>ID del pedido:</strong>
+                                                    <span th:text="${p.idPedido}"></span>
+                                                </p>
+                                            </div>
 
-                                        <div class="col-md-4">
-                                            <p class="mb-1">
-                                                <strong>Fecha:</strong>
-                                                <span th:text="${p.fechaPedido}"></span>
-                                            </p>
-                                        </div>
+                                            <div class="col-md-4">
+                                                <p class="mb-1">
+                                                    <strong>Fecha:</strong>
+                                                    <span th:text="${p.fechaPedido}"></span>
+                                                </p>
+                                            </div>
 
-                                        <div class="col-md-4">
-                                            <p class="mb-1">
-                                                <strong>Estado:</strong>
-                                                <span th:text="${p.estado}"></span>
-                                            </p>
+                                            <div class="col-md-4">
+                                                <p class="mb-1">
+                                                    <strong>Estado:</strong>
+                                                    <span th:text="${p.estado}"></span>
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
 
                             </div>
@@ -186,7 +188,7 @@
                         </div>
                     </div>
 
-                    
+
 
                 </div>
             </div>
