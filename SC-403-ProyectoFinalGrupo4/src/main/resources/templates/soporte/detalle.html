@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle del Ticket | FRAGRANCE AURA</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .soporte-container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .soporte-card {
+            background: #ffffff;
+            border: 1px solid #d9d9d9;
+            border-radius: 10px;
+            padding: 35px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .soporte-title {
+            font-size: 38px;
+            font-weight: bold;
+            color: #111111;
+            margin-bottom: 20px;
+        }
+
+        .bloque-info {
+            margin-bottom: 20px;
+            padding: 18px;
+            background: #fafafa;
+            border: 1px solid #ececec;
+            border-radius: 8px;
+        }
+
+        .bloque-info strong {
+            color: #111111;
+        }
+
+        .estado {
+            display: inline-block;
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .estado-pendiente {
+            background-color: #fff3cd;
+            color: #8a6d3b;
+        }
+
+        .estado-proceso {
+            background-color: #d9edf7;
+            color: #31708f;
+        }
+
+        .estado-resuelto {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+
+        .acciones {
+            margin-top: 25px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-secundario {
+            background-color: #ffffff;
+            color: #000000;
+            border: 1px solid #9aa4b2;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .btn-secundario:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="soporte-container">
+    <div class="soporte-card">
+        <div class="soporte-title">Detalle del ticket</div>
+
+        <div class="bloque-info">
+            <strong>ID del ticket:</strong>
+            <span th:text="${ticket.idTicket}"></span>
+        </div>
+
+        <div class="bloque-info">
+            <strong>Estado:</strong>
+            <span th:if="${ticket.estado == 'Pendiente'}" class="estado estado-pendiente" th:text="${ticket.estado}"></span>
+            <span th:if="${ticket.estado == 'En proceso'}" class="estado estado-proceso" th:text="${ticket.estado}"></span>
+            <span th:if="${ticket.estado == 'Resuelto'}" class="estado estado-resuelto" th:text="${ticket.estado}"></span>
+            <span th:if="${ticket.estado != 'Pendiente' and ticket.estado != 'En proceso' and ticket.estado != 'Resuelto'}"
+                  class="estado" style="background:#eeeeee; color:#333333;"
+                  th:text="${ticket.estado}"></span>
+        </div>
+
+        <div class="bloque-info">
+            <strong>Descripción del problema:</strong>
+            <p th:text="${ticket.descripcion}" style="margin-top: 10px;"></p>
+        </div>
+
+        <div class="acciones">
+            <a th:href="@{/ticket/listado}" class="btn-secundario">← Volver</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

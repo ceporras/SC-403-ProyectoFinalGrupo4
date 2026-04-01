@@ -28,7 +28,42 @@
       </div>
     </main>
 
-    <footer th:replace="~{general/layout :: footer}"></footer>
+    <footer class="footer-perfumeria mt-5">
+    <div class="container py-4">
+        <div class="row text-center text-md-start">
+
+            <!-- Información -->
+            <div class="col-md-4 mb-3">
+                <h6 class="footer-title">Perfumería</h6>
+                <p class="small">© 2026 Perfumería</p>
+                
+            </div>
+
+            <!-- Contacto -->
+            <div class="col-md-4 mb-3">
+                <h6 class="footer-title">Contacto</h6>
+                <p class="small">
+                    <i class="bi bi-envelope"></i>
+                    <a href="mailto:perfumeria1920@gmail.com">perfumeria1920@gmail.com</a>
+                </p>
+                <p class="small">
+                    <i class="bi bi-telephone"></i> +506 8888-8888
+                </p>
+            </div>
+
+            <!-- Redes -->
+            <div class="col-md-4 mb-3">
+                <h6 class="footer-title">Síguenos</h6>
+                <div class="social-icons">
+                    <a href="#"><i class="bi bi-facebook"></i> Facebook</a>
+                    <a href="#"><i class="bi bi-instagram"></i> Instagram</a>
+                    <a href="#"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</footer>
     <div th:replace="~{general/layout :: scripts}"></div>
   </body>
 </html>
