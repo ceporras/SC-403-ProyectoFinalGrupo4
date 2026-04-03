@@ -1,10 +1,10 @@
 package tienda.proyecto.repository;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import tienda.proyecto.domain.Factura;
 import tienda.proyecto.domain.Pedido;
 import tienda.proyecto.domain.Usuario;
 
@@ -19,9 +19,15 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
     //@Query(nativeQuery = true, value = "")
     //public List<Pedido> findByUsuario(Integer idUsuario);
     public List<Pedido> findByUsuario(Usuario usuario);
+
+    public List<Pedido> findByActivoTrueOrderByFechaPedidoDesc();
+
+    public List<Pedido> findByActivoTrueAndEstadoOrderByFechaPedidoDesc(String estado);
     
     @Query(nativeQuery = true, value = "SELECT * FROM pedido WHERE id_pedido=:idPedido AND id_usuario=:idUsuario")
     public Pedido findByPedidoAndUsuario(@Param("idPedido")Integer idPedido, @Param("idUsuario")Integer idUsuario);
+
+    public Optional<Pedido> findByIdPedidoAndActivoTrue(Integer idPedido);
     
     //public Pedido findByPedidoAndUsuario(Integer idPedido, Integer idUsuario);
     

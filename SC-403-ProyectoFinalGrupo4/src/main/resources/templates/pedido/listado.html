@@ -1,15 +1,89 @@
-<!DOCTYPE html>
-<!--
-
-
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/layout :: head('Pedidos · Listado')}"></head>
     <body>
-        <div>TODO write content</div>
+        <nav th:replace="~{general/layout :: navbar}"></nav>
+
+        <main class="container py-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <div>
+                    <h1 class="h3 mb-0">[[#{pedido.listado}]]</h1>
+                    <div class="muted">[[#{pedido.subtitulo}]]</div>
+                </div>
+            </div>
+
+            <div th:if="${todoOk}" class="alert alert-success" th:text="${todoOk}"></div>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form class="row g-3 align-items-end" th:action="@{/pedido/listado}" method="get">
+                        <div class="col-md-4">
+                            <label for="estado" class="form-label">[[#{pedido.filtro.estado}]]</label>
+                            <select id="estado" name="estado" class="form-select">
+                                <option value="">[[#{pedido.filtro.todos}]]</option>
+                                <option th:each="estado : ${estadosPedido}"
+                                        th:value="${estado}"
+                                        th:selected="${estado == estadoSeleccionado}"
+                                        th:text="${estado}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-auto d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">[[#{accion.aplicar}]]</button>
+                            <a th:href="@{/pedido/listado}" class="btn btn-secondary">[[#{accion.limpiar}]]</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive" th:if="${pedidos != null and !pedidos.empty}">
+                        <table class="table table-striped align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>[[#{pedido.codigo}]]</th>
+                                    <th>[[#{pedido.cliente}]]</th>
+                                    <th>[[#{pedido.correo}]]</th>
+                                    <th>[[#{pedido.estado}]]</th>
+                                    <th>[[#{pedido.acciones}]]</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="pedido : ${pedidos}">
+                                    <td th:text="${pedido.idPedido}">1</td>
+                                    <td th:text="${pedido.usuario.nombre + ' ' + pedido.usuario.primerApellido}">Usuario</td>
+                                    <td th:text="${pedido.usuario.email}">correo@correo.com</td>
+                                    <td>
+                                        <span th:text="${pedido.estado}">RECIBIDO</span>
+                                    </td>
+                                    <td>
+                                        <form class="d-flex gap-2 align-items-center" th:action="@{/pedido/guardarEstado}" method="post">
+                                            <input type="hidden" name="idPedido" th:value="${pedido.idPedido}">
+                                            <input type="hidden" name="estadoSeleccionado" th:value="${estadoSeleccionado}">
+                                            <select name="estado" class="form-select form-select-sm">
+                                                <option th:each="estado : ${estadosPedido}"
+                                                        th:value="${estado}"
+                                                        th:selected="${estado == pedido.estado}"
+                                                        th:text="${estado}"></option>
+                                            </select>
+                                            <button type="submit" class="btn btn-warning btn-sm">[[#{accion.actualizar}]]</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center p-2" th:if="${pedidos == null or pedidos.empty}">
+                        <span>[[#{lista.vacia}]]</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer th:replace="~{general/layout :: footer}"></footer>
+        <div th:replace="~{general/layout :: scripts}"></div>
     </body>
 </html>

@@ -13,6 +13,8 @@ import tienda.proyecto.repository.*;
 @Service
 public class PedidoService {
 
+    private static final List<String> ESTADOS_PEDIDO = List.of("RECIBIDO", "PROCESADO", "ENVIADO");
+
     @Autowired
     private PedidoRepository pedidoRepository;
     @Autowired
@@ -34,6 +36,34 @@ public class PedidoService {
         return pedidoRepository.findByPedidoAndUsuario(idPedido, usuario.getIdUsuario());
     }
 
+    @Transactional(readOnly = true)
+    public List<Pedido> getPedidos(String estado) {
+        if (estado == null || estado.isBlank()) {
+            return pedidoRepository.findByActivoTrueOrderByFechaPedidoDesc();
+        }
+        return pedidoRepository.findByActivoTrueAndEstadoOrderByFechaPedidoDesc(estado.trim().toUpperCase());
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> getEstadosPedido() {
+        return ESTADOS_PEDIDO;
+    }
+
+    @Transactional
+    public void actualizarEstado(Integer idPedido, String estado) {
+        String nuevoEstado = estado == null ? "" : estado.trim().toUpperCase();
+
+        if (!ESTADOS_PEDIDO.contains(nuevoEstado)) {
+            throw new IllegalArgumentException("Estado no valido");
+        }
+
+        Pedido pedido = pedidoRepository.findByIdPedidoAndActivoTrue(idPedido)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
+
+        pedido.setEstado(nuevoEstado);
+        pedidoRepository.save(pedido);
+    }
+
     @Transactional
     public Pedido crearPedido(Usuario usuario) {
         //buscar items de carrito segun usuario logueado
@@ -47,7 +77,7 @@ public class PedidoService {
         Pedido pedido = new Pedido();
         pedido.setUsuario(usuario);
         pedido.setFechaPedido(LocalDate.now());
-        pedido.setEstado("PENDIENTE");
+        pedido.setEstado("RECIBIDO");
         pedido.setActivo(true);
 
         List<DetallePedido> detallesPedido = new ArrayList<>();
@@ -121,7 +151,7 @@ public class PedidoService {
         factura.setMontoTotal(total);
         pedido.setFactura(factura);
 
-        pedido.setEstado("CONFIRMADO");
+        pedido.setEstado("RECIBIDO");
         pedidoRepository.save(pedido);
 
     }

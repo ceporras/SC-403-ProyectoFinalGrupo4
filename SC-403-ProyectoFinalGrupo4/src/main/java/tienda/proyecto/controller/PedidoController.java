@@ -2,6 +2,7 @@ package tienda.proyecto.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
@@ -13,13 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tienda.proyecto.domain.DetallePedido;
 import tienda.proyecto.domain.Direccion;
 import tienda.proyecto.domain.Pedido;
 import tienda.proyecto.domain.Usuario;
-import tienda.proyecto.service.CategoriaService;
 import tienda.proyecto.service.PedidoService;
-import tienda.proyecto.service.ProductoService;
 import tienda.proyecto.service.UsuarioCuentaService;
 import tienda.proyecto.service.UsuarioService;
 
@@ -35,6 +35,15 @@ public class PedidoController {
     private PedidoService pedidoService;
     @Autowired
     private MessageSource messageSource;
+
+    @GetMapping("/listado")
+    public String listado(@RequestParam(required = false) String estado, Model model) {
+        var pedidos = pedidoService.getPedidos(estado);
+        model.addAttribute("pedidos", pedidos);
+        model.addAttribute("estadosPedido", pedidoService.getEstadosPedido());
+        model.addAttribute("estadoSeleccionado", estado == null ? "" : estado);
+        return "/pedido/listado";
+    }
 
     public Usuario getLoggedInUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -83,5 +92,25 @@ public class PedidoController {
 
         model.addAttribute("pedido", pedido);
         return "/pedido/detalle";
+    }
+
+    @PostMapping("/guardarEstado")
+    public String guardarEstado(@RequestParam Integer idPedido,
+            @RequestParam String estado,
+            @RequestParam(required = false) String estadoSeleccionado,
+            RedirectAttributes redirectAttributes) {
+        try {
+            pedidoService.actualizarEstado(idPedido, estado);
+            redirectAttributes.addFlashAttribute("todoOk",
+                    messageSource.getMessage("pedido.estado.actualizado", null, Locale.getDefault()));
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("pedido.error01", null, Locale.getDefault()));
+        }
+
+        if (estadoSeleccionado != null && !estadoSeleccionado.isBlank()) {
+            return "redirect:/pedido/listado?estado=" + estadoSeleccionado;
+        }
+        return "redirect:/pedido/listado";
     }
 }
