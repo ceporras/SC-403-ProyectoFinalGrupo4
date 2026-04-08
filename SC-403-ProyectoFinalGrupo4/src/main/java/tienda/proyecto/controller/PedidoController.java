@@ -1,5 +1,6 @@
 package tienda.proyecto.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -65,8 +66,6 @@ public class PedidoController {
         List<DetallePedido> itemsPedido = new ArrayList<>();
         itemsPedido = pedido.getDetallePedido();
 
-        
-        
         model.addAttribute("itemsPedido", itemsPedido);
         model.addAttribute("pedido", pedido);
         model.addAttribute("direcciones", direcciones);
@@ -83,12 +82,20 @@ public class PedidoController {
 
         return "/pedido/pedido_creado";
     }
-    
-    
+
     @GetMapping("/detalle/{idPedido}")
     public String detalle(Model model, @PathVariable("idPedido") int idPedido) {
         Usuario usuario = getLoggedInUser();
         var pedido = pedidoService.getPedidoByIdAndUsuario(idPedido, usuario);
+
+        //sumar total 
+        BigDecimal total = BigDecimal.ZERO;
+        for (DetallePedido d : pedido.getDetallePedido()) {
+            total = total.add(
+                    d.getPrecioUnitario().multiply(BigDecimal.valueOf(d.getCantidad())));
+        }
+
+        model.addAttribute("total", total);
 
         model.addAttribute("pedido", pedido);
         return "/pedido/detalle";

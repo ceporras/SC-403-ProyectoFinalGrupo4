@@ -1,15 +1,76 @@
-<!DOCTYPE html>
-<!--
-
-
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/layout :: head('Pedido · Detalle')}"></head>
     <body>
-        <div>detalle de pedido</div>
+        <nav th:replace="~{general/layout :: navbar}"></nav>
+
+        <section>
+            <div class="container mt-5">
+
+                <!-- Pedido Info -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>[[#{pedido.pedido}]] #<span th:text="${pedido.idPedido}"></span></h4>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>[[#{pedido.estado}]] :</strong> <span th:text="${pedido.estado}"></span></p>
+                        <p><strong>[[#{pedido.fecha}]] :</strong> <span th:text="${pedido.fechaPedido}"></span></p>
+                    </div>
+                </div>
+                <!-- Productos -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Productos</h5>
+                    </div>
+                    <div class="card-body">
+
+                        <table class="table table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th>[[#{producto.imagen}]]</th>
+                                    <th>[[#{producto.producto}]]</th>
+                                    <th>[[#{producto.precio}]]</th>
+                                    <th>[[#{carrito.total}]]</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr th:each="detalle : ${pedido.detallePedido}">
+                                    <td>
+                                        <img th:src="${detalle.producto.rutaImagen}" 
+                                             class="img-thumbnail" 
+                                             style="width: 80px; height: 80px;">
+                                    </td>
+                                    <td th:text="${detalle.producto.nombre}"></td>
+                                    <td th:text="${detalle.precioUnitario}"></td>
+                                    <td th:text="${detalle.cantidad}"></td>
+                                    <td th:text="${detalle.precioUnitario * detalle.cantidad}"></td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+                <!-- Total -->
+                <div class="card mt-3">
+                    <div class="card-body text-end">
+                        <h4>
+                            [[#{carrito.totalCompra}]] 
+                            <span th:text="${total}"></span>
+                        </h4>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <footer th:replace="~{general/layout :: footer}"></footer>
+        <div th:replace="~{general/layout :: scripts}"></div>
     </body>
 </html>

@@ -3,6 +3,7 @@ package tienda.proyecto.service;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @PreAuthorize("hasRole('VENDEDOR')")
     @Transactional(readOnly = true)
     public List<Usuario> getUsuarios(boolean activo) {
         if (activo) {

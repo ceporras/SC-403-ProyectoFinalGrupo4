@@ -50,12 +50,6 @@ public class RegistroService {
         try {
             String clave = demeClave();
             usuario.setPassword(clave);
-            /*
-            ///test de asignar rol a usuario antes de crearlo
-            Rol rolUsuario = rolRepository.findByRol("USUARIO")
-                    .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
-            usuario.getRoles().add(rolUsuario);
-            ///*/
             usuario.setActivo(false);
             usuarioService.save(usuario, false);
             enviaCorreoActivar(usuario, clave);

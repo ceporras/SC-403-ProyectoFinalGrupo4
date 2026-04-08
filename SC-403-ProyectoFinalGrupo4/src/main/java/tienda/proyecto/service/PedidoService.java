@@ -25,12 +25,9 @@ public class PedidoService {
     private CarritoRepository carritoRepository;
     @Autowired
     private DireccionRepository direccionRepository;
+    @Autowired
+    private CorreoService correoService;
 
-    /*
-    @Transactional(readOnly = true)
-    public List<Pedido> getPedidos() {
-
-    }*/
     @Transactional(readOnly = true)
     public Pedido getPedidoByIdAndUsuario(int idPedido, Usuario usuario) {
         return pedidoRepository.findByPedidoAndUsuario(idPedido, usuario.getIdUsuario());
@@ -103,9 +100,8 @@ public class PedidoService {
 
         pedido.setDetallePedido(detallesPedido);
 
-        
         pedidoRepository.save(pedido);
-        
+
         //borrar carrito, ya que se crea pedido
         carritoRepository.deleteAll(itemsCarrito);
         return pedido;
@@ -127,20 +123,17 @@ public class PedidoService {
         BigDecimal total = BigDecimal.ZERO;
 
         for (DetallePedido d : pedido.getDetallePedido()) {
-
             BigDecimal subtotal = d.getPrecioUnitario()
                     .multiply(BigDecimal.valueOf(d.getCantidad()));
-
             total = total.add(subtotal);
-
             //reducir inventario segun cantidad comprada
             Producto p = d.getProducto();
             if (p.getStock() < d.getCantidad()) {
                 throw new RuntimeException("Stock insuficiente");
             }
-
             p.setStock(p.getStock() - d.getCantidad());
             productoRepository.save(p);
+
         }
 
         //crear factura
@@ -153,6 +146,56 @@ public class PedidoService {
 
         pedido.setEstado("RECIBIDO");
         pedidoRepository.save(pedido);
+        //enviar correo a cliente y admins
+        enviarCorreosPedido(pedido);
 
+    }
+
+    //metodo para enviar correos al crearse un pedido
+    private void enviarCorreosPedido(Pedido pedido) {
+        try {
+            Usuario usuario = pedido.getUsuario();
+
+            //Calcular total
+            BigDecimal total = BigDecimal.ZERO;
+            for (DetallePedido d : pedido.getDetallePedido()) {
+                total = total.add(
+                        d.getPrecioUnitario().multiply(BigDecimal.valueOf(d.getCantidad())));
+            }
+
+            //Email para usuario que hizo la compra
+            String asuntoUsuario = "Confirmación de Pedido #" + pedido.getIdPedido();
+
+            String contenidoUsuario = "<h2>Gracias por tu compra!</h2>"
+                    + "<p>Hola " + usuario.getNombre() + ",</p>"
+                    + "<p>Tu pedido #" + pedido.getIdPedido() + " fue recibido.</p>"
+                    + "<p><strong>Total: ₡" + total + "</strong></p>";
+
+            correoService.enviarCorreoHtml(
+                    usuario.getEmail(),
+                    asuntoUsuario,
+                    contenidoUsuario
+            );
+
+            //  Email para admins 
+            String asuntoAdmin = "Nuevo pedido #" + pedido.getIdPedido();
+
+            String contenidoAdmin = "<h2>Nuevo pedido recibido</h2>"
+                    + "<p>Usuario: " + usuario.getNombre() + " (" + usuario.getEmail() + ")</p>"
+                    + "<p>Pedido ID: " + pedido.getIdPedido() + "</p>"
+                    + "<p>Total: ₡" + total + "</p>";
+
+            String[] admins = {
+                //"admin1@tienda.com",
+                "ceporrasb@hotmail.com"
+            };
+
+            for (String admin : admins) {
+                correoService.enviarCorreoHtml(admin, asuntoAdmin, contenidoAdmin);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
