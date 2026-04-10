@@ -19,6 +19,8 @@
                     <div class="card-body">
                         <p><strong>[[#{pedido.estado}]] :</strong> <span th:text="${pedido.estado}"></span></p>
                         <p><strong>[[#{pedido.fecha}]] :</strong> <span th:text="${pedido.fechaPedido}"></span></p>
+                        <a th:href="@{'/ticket/nuevo/' + ${pedido.idPedido}}" class="btn btn-warning">
+                            Crear ticket de soporte</a>
                     </div>
                 </div>
                 <!-- Productos -->
@@ -249,17 +251,19 @@
                                 </thead>
                                 <tbody>
                                     <tr th:each="pedido : ${pedidos}">
+
                                         <td th:text="${pedido.idPedido}">1</td>
                                         <td th:text="${pedido.usuario.nombre + ' ' + pedido.usuario.primerApellido}">Usuario</td>
                                         <td th:text="${pedido.usuario.email}">correo@correo.com</td>
                                         <td>
                                             <span th:text="${pedido.estado}">RECIBIDO</span>
                                         </td>
-                                        <td>
+
+                                        <td class="d-flex gap-2">
                                             <form class="d-flex gap-2 align-items-center" th:action="@{/pedido/guardarEstado}" method="post">
                                                 <input type="hidden" name="idPedido" th:value="${pedido.idPedido}">
                                                     <input type="hidden" name="estadoSeleccionado" th:value="${estadoSeleccionado}"/>
-                                                    <select name="estado" class="form-select form-select-sm">
+                                                    <select name="estado" class="form-select form-select-sm w-auto">
                                                         <option th:each="estado : ${estadosPedido}"
                                                                 th:value="${estado}"
                                                                 th:selected="${estado == pedido.estado}"
@@ -267,7 +271,11 @@
                                                     </select>
                                                     <button type="submit" class="btn btn-warning btn-sm">[[#{accion.actualizar}]]</button>
                                             </form>
+                                            <a th:href="@{/pedido/detalle/{idPedido}(idPedido=${pedido.idPedido})}"
+                                               class="btn btn-primary btn-sm">
+                                                [[#{pedido.ver.detalle}]]</a>
                                         </td>
+
                                     </tr>
                                 </tbody>
                             </table>

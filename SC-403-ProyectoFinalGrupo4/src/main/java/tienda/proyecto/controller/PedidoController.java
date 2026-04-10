@@ -84,9 +84,24 @@ public class PedidoController {
     }
 
     @GetMapping("/detalle/{idPedido}")
-    public String detalle(Model model, @PathVariable("idPedido") int idPedido) {
+    public String detalle(Model model, @PathVariable("idPedido") Integer idPedido) {
         Usuario usuario = getLoggedInUser();
-        var pedido = pedidoService.getPedidoByIdAndUsuario(idPedido, usuario);
+        
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        //confirmar si usuario logueado es admin o no
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        Pedido pedido;
+        if(isAdmin){
+            //admin no ocupa validacion de usuario, puede ver cualquier pedido
+             pedido = pedidoService.getPedidoById(idPedido);
+        }else{
+            //si no es admin, usuario logueado solo puede ver sus propios pedidos
+             pedido = pedidoService.getPedidoByIdAndUsuario(idPedido, usuario);
+        }
+        
 
         //sumar total 
         BigDecimal total = BigDecimal.ZERO;

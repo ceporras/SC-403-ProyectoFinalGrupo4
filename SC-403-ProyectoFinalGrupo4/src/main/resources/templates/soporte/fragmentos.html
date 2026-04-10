@@ -18,7 +18,6 @@
                     </div>
 
                     <div class="acciones">
-                        <a th:href="@{/ticket/nuevo}" class="btn-soporte">Crear ticket</a>
                         <a th:href="@{/}" class="btn-secundario">← Volver al inicio</a>
                     </div>
 
@@ -26,12 +25,13 @@
                         No hay tickets registrados en este momento.
                     </div>
 
-                    <table class="tabla-soporte" th:if="${not #lists.isEmpty(tickets)}">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Estado</th>
                                 <th>Descripción</th>
+                                <th>Pedido</th>
                                 <th>Acción</th>
                             </tr>
                         </thead>
@@ -47,8 +47,14 @@
                                           th:text="${t.estado}"></span>
                                 </td>
                                 <td th:text="${t.descripcion}"></td>
+                                <td th:text="${t.pedido.idPedido}"></td>
                                 <td>
-                                    <a th:href="@{/ticket/detalle/{id}(id=${t.idTicket})}" class="mini-btn">Ver detalle</a>
+                                    <a th:href="@{'/ticket/detalle/'+${t.idTicket}}" class="btn btn-sm btn-primary">Ver detalle</a>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(tickets)}">
+                                <td colspan="5" class="text-center">
+                                    No hay tickets registrados en este momento.
                                 </td>
                             </tr>
                         </tbody>
@@ -94,7 +100,7 @@
         <main class="flex-fill" th:fragment="nuevo">
             <div class="soporte-container">
                 <div class="soporte-card">
-                    <div class="soporte-title">Crear ticket de soporte</div>
+                    <div class="soporte-title"><h2>Crear ticket de soporte</h2></div>
                     <div class="soporte-subtitle">
                         Completa la información para reportar el inconveniente.
                     </div>
@@ -104,16 +110,17 @@
                     </div>
 
                     <form th:action="@{/ticket/guardar}" method="post" th:object="${ticket}">
+                        <input type="hidden" name="idPedido" th:value="${idPedido}">
 
-                        <div class="campo">
-                            <label for="descripcion">Describe tu problema</label>
-                            <textarea id="descripcion" th:field="*{descripcion}" placeholder="Escribe aquí el detalle de tu consulta o inconveniente..." required></textarea>
-                        </div>
+                            <div class="mb-3">
+                                <label class="form-label">Describe tu problema</label>
+                                <textarea name="descripcion" class="form-control" placeholder="Escribe aquí el detalle de tu consulta o inconveniente..." required></textarea>
+                            </div>
 
-                        <div class="acciones">
-                            <button type="submit" class="btn-soporte">Enviar ticket</button>
-                            <a th:href="@{/ticket/listado}" class="btn-secundario">← Volver</a>
-                        </div>
+                            <div class="acciones">
+                                <button type="submit" class="btn btn-primary">Enviar ticket</button>
+                                <a th:href="@{/ticket/listado}" class="btn-secundario">← Volver</a>
+                            </div>
                     </form>
                 </div>
             </div>

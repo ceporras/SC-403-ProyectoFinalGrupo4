@@ -29,8 +29,14 @@ public class PedidoService {
     private CorreoService correoService;
 
     @Transactional(readOnly = true)
-    public Pedido getPedidoByIdAndUsuario(int idPedido, Usuario usuario) {
+    public Pedido getPedidoByIdAndUsuario(Integer idPedido, Usuario usuario) {
         return pedidoRepository.findByPedidoAndUsuario(idPedido, usuario.getIdUsuario());
+    }
+    
+    @Transactional(readOnly = true)
+    public Pedido getPedidoById(Integer idPedido) {
+        return pedidoRepository.findById(idPedido).orElseThrow(() 
+                -> new RuntimeException("Pedido no encontrado"));
     }
 
     @Transactional(readOnly = true)
