@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Soporte | FRAGRANCE AURA</title>
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/layout :: head('Ticket · Soporte')}"></head>
     <style>
         body {
             background-color: #f4f4f4;
@@ -149,53 +148,13 @@
         }
     </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
+    <nav th:replace="~{general/layout :: navbar}"></nav>
 
-<div class="soporte-container">
-    <div class="soporte-card">
-        <div class="soporte-title">Centro de soporte</div>
-        <div class="soporte-subtitle">
-            Gestiona tus tickets y da seguimiento a los inconvenientes reportados.
-        </div>
+    
+    <main class="flex-fill"  th:replace="~{soporte/fragmentos :: listado}"></main>
 
-        <div class="acciones">
-            <a th:href="@{/ticket/nuevo}" class="btn-soporte">Crear ticket</a>
-            <a th:href="@{/}" class="btn-secundario">← Volver al inicio</a>
-        </div>
-
-        <div th:if="${#lists.isEmpty(tickets)}" class="mensaje-vacio">
-            No hay tickets registrados en este momento.
-        </div>
-
-        <table class="tabla-soporte" th:if="${not #lists.isEmpty(tickets)}">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Estado</th>
-                    <th>Descripción</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="t : ${tickets}">
-                    <td th:text="${t.idTicket}"></td>
-                    <td>
-                        <span th:if="${t.estado == 'Pendiente'}" class="estado estado-pendiente" th:text="${t.estado}"></span>
-                        <span th:if="${t.estado == 'En proceso'}" class="estado estado-proceso" th:text="${t.estado}"></span>
-                        <span th:if="${t.estado == 'Resuelto'}" class="estado estado-resuelto" th:text="${t.estado}"></span>
-                        <span th:if="${t.estado != 'Pendiente' and t.estado != 'En proceso' and t.estado != 'Resuelto'}"
-                              class="estado" style="background:#eeeeee; color:#333333;"
-                              th:text="${t.estado}"></span>
-                    </td>
-                    <td th:text="${t.descripcion}"></td>
-                    <td>
-                        <a th:href="@{/ticket/detalle/{id}(id=${t.idTicket})}" class="mini-btn">Ver detalle</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
+    <footer th:replace="~{general/layout :: footer}"></footer>
+    <div th:replace="~{general/layout :: scripts}"></div>
 </body>
 </html>

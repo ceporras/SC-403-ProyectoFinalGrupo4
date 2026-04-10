@@ -3,10 +3,10 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <head th:replace="~{general/layout :: head('Login')}"></head>
-    <body>
+    <body class="d-flex flex-column min-vh-100">
         <nav th:replace="~{general/layout :: navbar}"></nav>
 
-        <main class="container py-5" style="max-width: 520px;">
+        <main class="container py-5 flex-fill" style="max-width: 520px;">
             <div class="card">
                 <div class="card-body p-4">
                     <h2 class="h4 fw-semibold mb-1">Iniciar sesión</h2>

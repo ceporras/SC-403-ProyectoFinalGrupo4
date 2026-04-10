@@ -8,9 +8,10 @@
 
 
         <h1>Pedido creado con exito</h1>
-        
-        
-        
+
+        <button type="button" class="btn btn-primary" th:href="@{/cuenta}">
+            <i class="fa-solid fa-plus"></i> [[#{pedido.listado}]]</button>
+
         <footer th:replace="~{general/layout :: footer}"></footer>
         <div th:replace="~{general/layout :: scripts}"></div>
     </body>
