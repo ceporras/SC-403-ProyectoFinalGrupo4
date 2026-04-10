@@ -9,15 +9,24 @@ import org.springframework.data.repository.query.Param;
 
 
 
-public interface ProductoRepository extends JpaRepository<Producto, Integer>{
+public interface ProductoRepository extends JpaRepository<Producto, Integer> {
+
     public List<Producto> findByActivoTrue();
-    
-    //filtrar productos por categoria    
-    @Query(nativeQuery = true, value = "SELECT * FROM producto WHERE id_categoria=:id_categoria")
+
+    @Query(nativeQuery = true, value = "SELECT * FROM producto WHERE id_categoria = :id_categoria")
     public List<Producto> getProductoByCategoria(@Param("id_categoria") int idCategoria);
-    
-    
-    
-    @Query(nativeQuery = true, value = "SELECT * FROM producto WHERE id_producto=:id_producto")
+
+    @Query(nativeQuery = true, value = "SELECT * FROM producto WHERE id_producto = :id_producto")
     public Producto getProductoById(@Param("id_producto") int idProducto);
+
+    @Query(nativeQuery = true, value ="""
+        SELECT * 
+        FROM producto
+        WHERE
+            (:buscar IS NULL OR LOWER(nombre) LIKE LOWER(CONCAT('%', :buscar, '%')))
+            AND
+            (:categoriaId IS NULL OR id_categoria = :categoriaId)
+        """)
+    public List<Producto> filtrarProductos(@Param("buscar") String buscar,
+            @Param("categoriaId") Integer categoriaId);
 }

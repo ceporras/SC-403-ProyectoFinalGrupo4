@@ -24,7 +24,7 @@ public class ProductoService {
     private ProductoRepository productoRepository;
     @Autowired
     private FirebaseStorageService firebaseStorageService;
-    
+
     @Autowired
     private CarritoRepository carritoRepository;
 
@@ -126,5 +126,14 @@ public class ProductoService {
     public void elimiarItemCarrito(Usuario usuario, Producto producto) {
         carritoRepository.deleteByUsuarioAndProducto(usuario, producto);
     }
-    
+
+    @Transactional(readOnly = true)
+    public List<Producto> buscarFiltrados(String textoBusqueda, Integer idCategoria) {
+
+        if (textoBusqueda != null && textoBusqueda.trim().isEmpty()) {
+            textoBusqueda = null;
+        }
+        return productoRepository.filtrarProductos(textoBusqueda, idCategoria);
+    }
 }
+

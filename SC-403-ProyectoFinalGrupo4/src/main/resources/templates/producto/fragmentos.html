@@ -8,7 +8,7 @@
         <link th:href="@{/webjars/font-awesome/css/all.min.css}" rel="stylesheet"/>
 
 
-        <section th:fragment="listado">
+<section th:fragment="listado">
             <main class="container py-4">
                 <section th:replace="~{producto/fragmentos :: agregar}"></section>
 
@@ -16,26 +16,47 @@
                 <!--barra de busqueda  -->
                 <div class="card">
                     <div class="card-body">
-                        <div class="row g-2 align-items-center mb-3">
-                            <div class="col-md-6 w-25">
-                                <input class="form-control" placeholder="Buscar" />
+
+                        <form th:action="@{/producto/listado}" method="get">
+                            <div class="row g-2 align-items-center mb-3">
+
+                                <!-- Buscar -->
+                                <div class="col-md-3">
+                                    <input class="form-control"
+                                           type="text"
+                                           name="textoBusqueda"
+                                           placeholder="Buscar"
+                                           th:value="${textoBusqueda}" />
+                                </div>
+
+                                <!-- Categoría -->
+                                <div class="col-md-3">
+                                    <select name="idCategoria"
+                                            class="form-select">
+                                        <option value="">Todas las categorías</option>
+                                        <option th:each="c : ${categorias}"
+                                                th:value="${c.idCategoria}"
+                                                th:text="${c.nombre}"
+                                                th:selected="${idCategoria != null and idCategoria == c.idCategoria}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <!-- Aplicar -->
+                                <div class="col-md-3 d-grid">
+                                    <button class="btn btn-aplicar" type="submit">
+                                        [[#{accion.aplicar}]]
+                                    </button>
+                                </div>
+
+                                <!-- Limpiar -->
+                                <div class="col-md-3 d-grid">
+                                    <a th:href="@{/producto/listado}" class="btn btn-limpiar">
+                                        [[#{accion.limpiar}]]
+                                    </a>
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <select name="categoria.idCategoria" 
-                                        class="form-select" 
-                                        aria-label="Default select example">
-                                    <option th:each="c : ${categorias}" th:value="${c.idCategoria}">
-                                        [[${c.nombre}]]
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md-3 d-grid">
-                                <button class="btn btn-primary" type="button">[[#{accion.aplicar}]]</button>
-                            </div>
-                            <div class="col-md-3 d-grid">
-                                <button class="btn btn-outline-primary" type="button">[[#{accion.limpiar}]]</button>
-                            </div>
-                        </div>
+                            
                         <!-- lista de productos -->
                         <section th:replace="~{producto/fragmentos :: tarjetas-producto}"></section>
                     </div>

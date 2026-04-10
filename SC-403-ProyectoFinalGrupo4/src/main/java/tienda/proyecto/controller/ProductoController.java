@@ -42,12 +42,20 @@ public class ProductoController {
     private MessageSource messageSource;
 
     @GetMapping("/listado")
-    public String listado(Model model) {
-        var productos = productoService.getProductos(false);
+    public String listado(Model model,
+            @RequestParam(required = false) String textoBusqueda,
+            @RequestParam(required = false) Integer idCategoria) {
+
+        var productos = productoService.buscarFiltrados(textoBusqueda, idCategoria);
         model.addAttribute("productos", productos);
         model.addAttribute("totalProductos", productos.size());
+
         var categorias = categoriaService.getCategorias(true);
         model.addAttribute("categorias", categorias);
+
+        model.addAttribute("textoBusqueda", textoBusqueda);
+        model.addAttribute("idCategoria", idCategoria);
+
         return "/producto/listado";
     }
 
