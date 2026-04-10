@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Detalle del Ticket | FRAGRANCE AURA</title>
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/layout :: head('Ticket · Detalle')}"></head>
     <style>
         body {
             background-color: #f4f4f4;
@@ -90,37 +89,13 @@
         }
     </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
+    <nav th:replace="~{general/layout :: navbar}"></nav>
 
-<div class="soporte-container">
-    <div class="soporte-card">
-        <div class="soporte-title">Detalle del ticket</div>
+    <main th:replace="~{soporte/fragmentos :: detalle}"></main>
 
-        <div class="bloque-info">
-            <strong>ID del ticket:</strong>
-            <span th:text="${ticket.idTicket}"></span>
-        </div>
-
-        <div class="bloque-info">
-            <strong>Estado:</strong>
-            <span th:if="${ticket.estado == 'Pendiente'}" class="estado estado-pendiente" th:text="${ticket.estado}"></span>
-            <span th:if="${ticket.estado == 'En proceso'}" class="estado estado-proceso" th:text="${ticket.estado}"></span>
-            <span th:if="${ticket.estado == 'Resuelto'}" class="estado estado-resuelto" th:text="${ticket.estado}"></span>
-            <span th:if="${ticket.estado != 'Pendiente' and ticket.estado != 'En proceso' and ticket.estado != 'Resuelto'}"
-                  class="estado" style="background:#eeeeee; color:#333333;"
-                  th:text="${ticket.estado}"></span>
-        </div>
-
-        <div class="bloque-info">
-            <strong>Descripción del problema:</strong>
-            <p th:text="${ticket.descripcion}" style="margin-top: 10px;"></p>
-        </div>
-
-        <div class="acciones">
-            <a th:href="@{/ticket/listado}" class="btn-secundario">← Volver</a>
-        </div>
-    </div>
-</div>
+    <footer th:replace="~{general/layout :: footer}"></footer>
+    <div th:replace="~{general/layout :: scripts}"></div>
 
 </body>
 </html>

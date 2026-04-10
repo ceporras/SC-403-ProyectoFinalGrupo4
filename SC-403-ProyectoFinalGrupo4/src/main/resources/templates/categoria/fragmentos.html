@@ -6,58 +6,58 @@
     <body>
 
 
-        <section th:fragment="listado">
-            <main class="container py-4">
+        <main class="container py-4 flex-fill" th:fragment="listado">
 
-                <section th:replace="~{categoria/fragmentos :: agregar}"></section>
-                <!--barra de busqueda  -->
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row g-2 align-items-center mb-3">
-                            <div class="col-md-6">
-                                <input class="form-control" placeholder="Buscar" />
-                            </div>
-                            <div class="col-md-3 d-grid">
-                                <button class="btn btn-outline-primary" type="button">[[#{accion.aplicar}]]</button>
-                            </div>
+
+            <section th:replace="~{categoria/fragmentos :: agregar}"></section>
+            <!--barra de busqueda  -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="row g-2 align-items-center mb-3">
+                        <div class="col-md-6">
+                            <input class="form-control" placeholder="Buscar" />
                         </div>
-                        <!--tabla de categorias  -->
-                        <div class="table-responsive" th:if="${categorias != null and !categorias.empty}">
-                            <table class="table table-striped align-middle mb-0">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">[[#{categoria.nombre}]]</th>
-                                        <th scope="col">[[#{categoria.activo}]]</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="c : ${categorias}">
-                                        <td>[[${c.idCategoria}]]</td>
-                                        <td>[[${c.nombre}]]</td>
-                                        <td th:text="${c.activo} ? 'Activa':'Inactiva'"></td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger"
-                                                    data-bs-toggle="modal" data-bs-target="#confirmModal"
-                                                    th:data-bs-id="${c.idCategoria}"
-                                                    th:data-bs-nombre="${c.nombre}"
-                                                sec:authorize="hasRole('ROLE_ADMIN')">
-                                                <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
-                                            </button>                                           
-                                            <a th:href="@{/categoria/modificar/}+${c.idCategoria}" sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-warning">
-                                                <i class="fas fa-pencil-alt"></i> [[#{accion.actualizar}]]
-                                            </a>                                                
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="col-md-3 d-grid">
+                            <button class="btn btn-outline-primary" type="button">[[#{accion.aplicar}]]</button>
                         </div>
-                        <div class="text-center p-2" th:if="${categorias == null or categorias.empty}">
-                            <span>[[#{lista.vacia}]]</span></div>
                     </div>
+                    <!--tabla de categorias  -->
+                    <div class="table-responsive" th:if="${categorias != null and !categorias.empty}">
+                        <table class="table table-striped align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">[[#{categoria.nombre}]]</th>
+                                    <th scope="col">[[#{categoria.activo}]]</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="c : ${categorias}">
+                                    <td>[[${c.idCategoria}]]</td>
+                                    <td>[[${c.nombre}]]</td>
+                                    <td th:text="${c.activo} ? 'Activa':'Inactiva'"></td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger"
+                                                data-bs-toggle="modal" data-bs-target="#confirmModal"
+                                                th:data-bs-id="${c.idCategoria}"
+                                                th:data-bs-nombre="${c.nombre}"
+                                                sec:authorize="hasRole('ROLE_ADMIN')">
+                                            <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
+                                        </button>                                           
+                                        <a th:href="@{/categoria/modificar/}+${c.idCategoria}" sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-warning">
+                                            <i class="fas fa-pencil-alt"></i> [[#{accion.actualizar}]]
+                                        </a>                                                
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center p-2" th:if="${categorias == null or categorias.empty}">
+                        <span>[[#{lista.vacia}]]</span></div>
                 </div>
-            </main>
-        </section>
+            </div>
+        </main>
+
 
 
 
@@ -176,8 +176,8 @@
                 </div>
             </div>
         </section>
-        
-        
+
+
         <section th:fragment="mostrarToast">
             <div aria-live="polite" aria-atomic="true" 
                  class="position-fixed top-50 start-50 translate-middle" style="z-index: 1080;">                
@@ -215,7 +215,7 @@
                 </div>
             </div>
         </section>
-        
+
         </section>
 
     </body>

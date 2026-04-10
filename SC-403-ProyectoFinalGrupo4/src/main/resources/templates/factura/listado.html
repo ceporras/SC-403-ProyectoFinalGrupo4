@@ -1,0 +1,62 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/layout :: head('Facturas · Listado')}"></head>
+    <body>
+        <nav th:replace="~{general/layout :: navbar}"></nav>
+
+
+        <div class="container mt-5">
+
+            <h2 class="mb-4">Mis Facturas</h2>
+
+            <div class="card">
+                <div class="card-body">
+
+                    <table class="table table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>[[#{factura.numero}]]</th>
+                                <th>[[#{pedido.pedido}]]</th>
+                                <th>[[#{factura.fecha}]]</th>
+                                <th>[[#{pedido.total}]]</th>
+                                <th>[[#{pedido.estado}]]</th>
+                                <th>[[#{pedido.acciones}]]</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr th:each="factura : ${facturas}">
+                                <td th:text="${factura.idFactura}"></td>
+                                <td th:text="${factura.pedido.idPedido}"></td>
+                                <td th:text="${factura.fecha}"></td>
+                                <td th:text="${factura.montoTotal}"></td>
+                                <td>
+                                    <span class="badge bg-success"
+                                          th:text="${factura.pedido.estado}">
+                                    </span>
+                                </td>
+                                <td>
+                                    <a th:href="@{'/pedido/detalle/' + ${factura.pedido.idPedido}}"
+                                       class="btn btn-primary btn-sm">
+                                        Ver Pedido
+                                    </a>
+                                </td>
+
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <footer th:replace="~{general/layout :: footer}"></footer>
+        <div th:replace="~{general/layout :: scripts}"></div>
+
+    </body>
+</html>

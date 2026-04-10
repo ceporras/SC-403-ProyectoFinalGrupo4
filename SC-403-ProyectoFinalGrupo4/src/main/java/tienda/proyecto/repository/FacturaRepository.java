@@ -7,4 +7,8 @@ import tienda.proyecto.domain.Factura;
 public interface FacturaRepository extends JpaRepository<Factura, Integer> {
 
     public List<Factura> findByActivoTrue();
+    
+    public List<Factura> findByActivoTrueOrderByFechaDesc();
+    
+    List<Factura> findByPedidoUsuarioIdUsuario(Integer idUsuario);
 }
