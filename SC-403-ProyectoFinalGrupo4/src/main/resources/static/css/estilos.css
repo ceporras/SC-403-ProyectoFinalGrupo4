@@ -45,6 +45,7 @@ body{
     color:black;
 }
 
+
 html, body {
     height: 100%;
     margin: 0;
@@ -111,4 +112,41 @@ html, body {
 }
 
 
+
+
+.footer-perfumeria {
+    background-color: #000; 
+    color: #ccc;
+    border-top: 1px solid #c9a14a; 
+}
+
+.footer-title {
+    color: #c9a14a; 
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.footer-perfumeria a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer-perfumeria a:hover {
+    color: #c9a14a;
+}
+
+.social-icons a {
+    display: block;
+    margin-bottom: 5px;
+    transition: 0.3s;
+}
+
+.social-icons i {
+    margin-right: 8px;
+    color: #c9a14a;
+}
+
+.social-icons a:hover i {
+    color: #fff;
+}
 

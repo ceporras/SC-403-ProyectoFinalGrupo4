@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Soporte | FRAGRANCE AURA</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .soporte-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .soporte-card {
+            background: #ffffff;
+            border: 1px solid #d9d9d9;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .soporte-title {
+            font-size: 42px;
+            font-weight: bold;
+            color: #111111;
+            margin-bottom: 10px;
+        }
+
+        .soporte-subtitle {
+            font-size: 18px;
+            color: #6c757d;
+            margin-bottom: 25px;
+        }
+
+        .btn-soporte {
+            display: inline-block;
+            background-color: #000000;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            border: 1px solid #000000;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-soporte:hover {
+            background-color: #222222;
+        }
+
+        .btn-secundario {
+            display: inline-block;
+            background-color: #ffffff;
+            color: #000000;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            border: 1px solid #9aa4b2;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-secundario:hover {
+            background-color: #f0f0f0;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .mensaje-vacio {
+            background: #fafafa;
+            border: 1px dashed #c8c8c8;
+            border-radius: 8px;
+            padding: 20px;
+            color: #555555;
+        }
+
+        .tabla-soporte {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .tabla-soporte th {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 14px;
+            text-align: left;
+        }
+
+        .tabla-soporte td {
+            padding: 14px;
+            border-bottom: 1px solid #dddddd;
+            color: #222222;
+            vertical-align: top;
+        }
+
+        .tabla-soporte tr:hover {
+            background-color: #fafafa;
+        }
+
+        .estado {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .estado-pendiente {
+            background-color: #fff3cd;
+            color: #8a6d3b;
+        }
+
+        .estado-proceso {
+            background-color: #d9edf7;
+            color: #31708f;
+        }
+
+        .estado-resuelto {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+
+        .mini-btn {
+            display: inline-block;
+            background-color: #000000;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 5px;
+            font-size: 14px;
+            border: none;
+        }
+
+        .mini-btn:hover {
+            background-color: #222222;
+        }
+    </style>
+</head>
+<body>
+
+<div class="soporte-container">
+    <div class="soporte-card">
+        <div class="soporte-title">Centro de soporte</div>
+        <div class="soporte-subtitle">
+            Gestiona tus tickets y da seguimiento a los inconvenientes reportados.
+        </div>
+
+        <div class="acciones">
+            <a th:href="@{/ticket/nuevo}" class="btn-soporte">Crear ticket</a>
+            <a th:href="@{/}" class="btn-secundario">← Volver al inicio</a>
+        </div>
+
+        <div th:if="${#lists.isEmpty(tickets)}" class="mensaje-vacio">
+            No hay tickets registrados en este momento.
+        </div>
+
+        <table class="tabla-soporte" th:if="${not #lists.isEmpty(tickets)}">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Estado</th>
+                    <th>Descripción</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="t : ${tickets}">
+                    <td th:text="${t.idTicket}"></td>
+                    <td>
+                        <span th:if="${t.estado == 'Pendiente'}" class="estado estado-pendiente" th:text="${t.estado}"></span>
+                        <span th:if="${t.estado == 'En proceso'}" class="estado estado-proceso" th:text="${t.estado}"></span>
+                        <span th:if="${t.estado == 'Resuelto'}" class="estado estado-resuelto" th:text="${t.estado}"></span>
+                        <span th:if="${t.estado != 'Pendiente' and t.estado != 'En proceso' and t.estado != 'Resuelto'}"
+                              class="estado" style="background:#eeeeee; color:#333333;"
+                              th:text="${t.estado}"></span>
+                    </td>
+                    <td th:text="${t.descripcion}"></td>
+                    <td>
+                        <a th:href="@{/ticket/detalle/{id}(id=${t.idTicket})}" class="mini-btn">Ver detalle</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
