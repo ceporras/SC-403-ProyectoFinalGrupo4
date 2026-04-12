@@ -14,8 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import tienda.proyecto.domain.Carrito;
 import tienda.proyecto.domain.CartItem;
+import tienda.proyecto.domain.Favorito;
 import tienda.proyecto.domain.Usuario;
 import tienda.proyecto.repository.CarritoRepository;
+import tienda.proyecto.repository.FavoritoRepository;
 
 @Service
 public class ProductoService {
@@ -27,6 +29,9 @@ public class ProductoService {
 
     @Autowired
     private CarritoRepository carritoRepository;
+
+    @Autowired
+    private FavoritoRepository favoritoRepository;
 
     @Transactional(readOnly = true)
     public List<Producto> getProductos(boolean activo) {
@@ -89,39 +94,45 @@ public class ProductoService {
         }
     }
 
-    
+    //metodos para carrito
     @Transactional
-    public void addToCart(Usuario usuario, Producto producto, int cantidad){
+    public void addToCart(Usuario usuario, Producto producto, int cantidad) {
         //validar si ya existe producto en el carrito
         Optional<Carrito> existe = carritoRepository.findByUsuarioAndProducto(usuario, producto);
-        
-        if (existe.isPresent()){
+
+        if (existe.isPresent()) {
             Carrito cart = existe.get();
-            cart.setCantidad(cart.getCantidad()+ cantidad);
+            cart.setCantidad(cart.getCantidad() + cantidad);
             //guardar solo modificando cantidad
             carritoRepository.save(cart);
-        }else{
+        } else {
             Carrito cart = new Carrito();
             cart.setUsuario(usuario);
             cart.setProducto(producto);
             cart.setCantidad(cantidad);
             carritoRepository.save(cart);
-            
+
         }
-        
+
     }
 
-    @Transactional(readOnly=true)
-    public List<Carrito> getCart(Usuario usuario){
+    @Transactional(readOnly = true)
+    public List<Carrito> getCart(Usuario usuario) {
         return carritoRepository.findByUsuario(usuario);
+    }
+    
+    @Transactional(readOnly = true)
+    public int cartCount(Usuario usuario) {
+        return carritoRepository.countByUsuario(usuario);
     }
 
     @Transactional
-    public void modificarCarrito(int idUsuario, int idProducto, int cantidad){
-                
+    public void modificarCarrito(int idUsuario, int idProducto, int cantidad) {
+
         carritoRepository.updateCantidadByProductoId(cantidad, idProducto, idUsuario);
 
     }
+
     @Transactional
     public void elimiarItemCarrito(Usuario usuario, Producto producto) {
         carritoRepository.deleteByUsuarioAndProducto(usuario, producto);
@@ -135,5 +146,34 @@ public class ProductoService {
         }
         return productoRepository.filtrarProductos(textoBusqueda, idCategoria);
     }
-}
 
+    //metodos para tratar con productos guardados como favoritos
+    @Transactional
+    public void addToFavorito(Usuario usuario, Producto producto) {
+
+        //agregar a DB como favorito para el usuario
+        Favorito fav = new Favorito();
+        fav.setUsuario(usuario);
+        fav.setProducto(producto);
+        favoritoRepository.save(fav);
+
+    }
+
+    //solo 1 por usuario y id
+    @Transactional(readOnly = true)
+    public Optional<Favorito> getFavorito(Usuario usuario, Producto producto) {
+        return favoritoRepository.findByUsuarioAndProducto(usuario, producto);
+    }
+
+    //lista de todos por usuario
+    @Transactional(readOnly = true)
+    public List<Favorito> getFavoritos(Usuario usuario) {
+        return favoritoRepository.findByUsuario(usuario);
+    }
+
+    @Transactional
+    public void elimiarFavorito(Usuario usuario, Producto producto) {
+        favoritoRepository.deleteByUsuarioAndProducto(usuario, producto);
+    }
+
+}

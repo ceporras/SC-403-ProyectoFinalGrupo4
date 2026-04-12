@@ -20,6 +20,8 @@ public interface CarritoRepository extends JpaRepository<Carrito, Integer> {
     
     public List<Carrito> findByUsuario(Usuario usuario);
     
+    public int countByUsuario(Usuario usuario);
+    
     @Modifying
     @Transactional
     @Query(nativeQuery = true, value = "UPDATE carrito SET cantidad=:cantidad WHERE id_producto=:idProducto AND id_usuario=:idUsuario")

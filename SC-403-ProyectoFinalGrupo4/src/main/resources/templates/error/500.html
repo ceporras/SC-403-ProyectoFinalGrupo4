@@ -1,0 +1,16 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/layout :: head('Error')}"></head>
+    <body class="d-flex flex-column min-vh-100">
+        <nav th:replace="~{general/layout :: navbar}"></nav>
+        <main class="container py-4 flex-fill">
+            <h1>Error - Internal Server Error</h1>
+            <p class="w-auto">Ha ocurrido un error</p>
+            <a class="btn btn-primary" th:href="@{/}">Volver a inicio</a>
+        </main>
+        <footer th:replace="~{general/layout :: footer}"></footer>
+        <div th:replace="~{general/layout :: scripts}"></div>
+    </body>
+</html>

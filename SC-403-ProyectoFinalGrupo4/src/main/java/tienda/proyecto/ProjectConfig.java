@@ -9,6 +9,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authorization.AuthorityAuthorizationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
@@ -25,6 +26,7 @@ import tienda.proyecto.domain.Ruta;
 import tienda.proyecto.service.RutaService;
 
 @Configuration
+@EnableMethodSecurity
 public class ProjectConfig implements WebMvcConfigurer {
 
     /* Los siguiente métodos son para implementar el tema de seguridad dentro del proyecto */
@@ -109,12 +111,12 @@ public class ProjectConfig implements WebMvcConfigurer {
                 .permitAll()
         ).logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/logout?logout=true")
+                .logoutSuccessUrl("/login?logout=true")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
         ).exceptionHandling(exceptions -> exceptions //manejo de excepciones
-                .accessDeniedPage("/acceso_denegado")
+                .accessDeniedPage("/error/403")
         ).sessionManagement(session -> session
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false)

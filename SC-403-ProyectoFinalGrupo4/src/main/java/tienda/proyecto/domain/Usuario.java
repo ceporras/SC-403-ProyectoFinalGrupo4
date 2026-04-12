@@ -82,6 +82,9 @@ public class Usuario implements Serializable {
     @OneToMany(mappedBy = "usuario")
     private List<Carrito> carrito;
     
+    @OneToMany(mappedBy = "usuario")
+    private List<Favorito> favorito;
+    
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinTable(name = "usuario_rol",
             joinColumns = @JoinColumn(name = "id_usuario"),

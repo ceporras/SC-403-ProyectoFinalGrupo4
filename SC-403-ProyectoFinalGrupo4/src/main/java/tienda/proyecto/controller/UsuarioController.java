@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Optional;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,7 +30,7 @@ public class UsuarioController {
         this.messageSource = messageSource;
         this.rolService = rolService;
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/listado")
     public String inicio(Model model) {
         var usuarios = usuarioService.getUsuarios(false);
@@ -62,6 +63,7 @@ public class UsuarioController {
         return "redirect:/usuario/listado";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/eliminar")
     public String eliminar(@RequestParam Integer idUsuario,
             RedirectAttributes redirectAttributes) {

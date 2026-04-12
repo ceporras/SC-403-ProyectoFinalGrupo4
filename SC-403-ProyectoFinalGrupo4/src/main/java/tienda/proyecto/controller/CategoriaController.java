@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService;
     
+    @PreAuthorize("hasRole('VENDEDOR')")
     @GetMapping("/listado")
     public String inicio(Model model){
         var categorias = categoriaService.getCategorias(false);
@@ -34,14 +36,14 @@ public class CategoriaController {
     
     @Autowired
     private MessageSource messageSource;
-    
+    @PreAuthorize("hasRole('VENDEDOR')")
     @PostMapping("/guardar")
     public String guardar(@Valid Categoria categoria, RedirectAttributes redirectAttributes){
         categoriaService.save(categoria);
         //redirectAttributes.addFlashAttribute("todoOk",messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault()));
         return "redirect:/categoria/listado";
     }
-    
+    @PreAuthorize("hasRole('VENDEDOR')")
     @PostMapping("/eliminar")
     public String eliminar(@RequestParam Integer idCategoria, RedirectAttributes redirectAttributes){
         String titulo="todoOk";
@@ -62,7 +64,7 @@ public class CategoriaController {
         return "redirect:/categoria/listado";
         
     }
-    
+    @PreAuthorize("hasRole('VENDEDOR')")
     @GetMapping("/modificar/{idCategoria}")
     public String modificar(@PathVariable("idCategoria") Integer idCategoria, Model model, RedirectAttributes redirectAttributes){
         Optional<Categoria> categoriaOpt = categoriaService.getCategoria(idCategoria);

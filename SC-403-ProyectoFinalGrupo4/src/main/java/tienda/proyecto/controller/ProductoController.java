@@ -7,6 +7,8 @@ import java.util.Locale;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -18,8 +20,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tienda.proyecto.domain.Carrito;
+import tienda.proyecto.domain.Favorito;
 import tienda.proyecto.domain.Pedido;
 import tienda.proyecto.domain.Usuario;
 import tienda.proyecto.service.CategoriaService;
@@ -73,6 +77,7 @@ public class ProductoController {
         return "/producto/detalle";
     }
 
+    @PreAuthorize("hasRole('VENDEDOR')")
     @PostMapping("/guardar")
     public String guardar(@Valid /*@ModelAttribute*/ Producto producto, @RequestParam(/*value = "imagenFile", required = false*/) MultipartFile imagenFile, RedirectAttributes redirectAttributes) {
         productoService.save(producto, imagenFile);
@@ -81,6 +86,7 @@ public class ProductoController {
         return "redirect:/producto/listado";
     }
 
+    @PreAuthorize("hasRole('VENDEDOR')")
     @PostMapping("/eliminar")
     public String eliminar(@RequestParam Integer idProducto, RedirectAttributes redirectAttributes) {
         String titulo = "todoOk";
@@ -101,6 +107,7 @@ public class ProductoController {
         return "redirect:/producto/listado";
     }
 
+    @PreAuthorize("hasRole('VENDEDOR')")
     @GetMapping("/modificar/{idProducto}")
     public String modificar(@PathVariable("idProducto") Integer idProducto, Model model, RedirectAttributes redirectAttributes) {
         Optional<Producto> productoOpt = productoService.getProducto(idProducto);
@@ -108,12 +115,14 @@ public class ProductoController {
             //redirectAttributes.addFlashAttribute("error", messageSource.getMessage("producto.error01", null, Locale.getDefault()));
             return "redirect:/producto/listado";
         }
-        model.addAttribute("producto", productoOpt.get());
+        model.addAttribute("producto", productoOpt.orElseThrow(()
+                -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado")));
         var categorias = categoriaService.getCategorias(true);
         model.addAttribute("categorias", categorias);
         return "/producto/modifica";
     }
 
+    //obtener usuario logueado
     public Usuario getLoggedInUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
@@ -121,6 +130,7 @@ public class ProductoController {
         return usuario.get();
     }
 
+    //metodos de carrito
     @PostMapping("/carrito/agregar")
     public String agregarAlCarrito(@RequestParam("idProducto") int idProducto,
             @RequestParam("cantidad") int cantidad) {
@@ -148,7 +158,7 @@ public class ProductoController {
     public String modificarCarrito(@RequestParam Integer idProducto,
             @RequestParam int cantidad) {
         Usuario usuario = getLoggedInUser();
-        
+
         productoService.modificarCarrito(usuario.getIdUsuario(), idProducto, cantidad);
         return "redirect:/producto/carrito";
     }
@@ -157,7 +167,7 @@ public class ProductoController {
     public String elimarDelCarrito(@RequestParam Integer idProducto) {
         Usuario usuario = getLoggedInUser();
         Producto producto = productoService.getProducto(idProducto).get();
-        
+
         productoService.elimiarItemCarrito(usuario, producto);
         return "redirect:/producto/carrito";
     }
@@ -167,7 +177,42 @@ public class ProductoController {
         //sacar usuario logueado para pasarlo a pedido
         Usuario usuario = getLoggedInUser();
         Pedido pedido = pedidoService.crearPedido(usuario);
-        return "redirect:/pedido/"+ pedido.getIdPedido() +"/crear";
+        return "redirect:/pedido/" + pedido.getIdPedido() + "/crear";
+    }
+
+    //metodos de favoritos
+    @GetMapping("/favoritos")
+    public String favoritoListado(Model model) {
+        Usuario usuario = getLoggedInUser();
+        var favoritos = productoService.getFavoritos(usuario);
+        model.addAttribute("favoritos", favoritos);
+        return "/producto/favoritos";
+    }
+
+    @PostMapping("/favorito/agregar")
+    public String agregarFavorito(@RequestParam("idProducto") int idProducto,
+            RedirectAttributes redirectAttributes) {
+        //buscar producto a agregar a favoritos
+        Optional<Producto> productoOpt = productoService.getProducto(idProducto);
+        Producto producto = productoOpt.get();
+        //sacar usuario logueado para asignarle al favorito
+        Usuario usuario = getLoggedInUser();
+        //validar si ya existe en favoritos
+        Optional<Favorito> existe = productoService.getFavorito(usuario, producto);
+        if (existe.isPresent()) {
+            redirectAttributes.addFlashAttribute("error", "Ya está en favoritos");
+        } else {
+            productoService.addToFavorito(usuario, producto);
+        }
+        return "redirect:/producto/listado";
+    }
+
+    @PostMapping("/favorito/eliminar")
+    public String elimarFavorito(@RequestParam Integer idProducto) {
+        Usuario usuario = getLoggedInUser();
+        Producto producto = productoService.getProducto(idProducto).get();
+        productoService.elimiarFavorito(usuario, producto);
+        return "redirect:/producto/favoritos";
     }
 
 }
